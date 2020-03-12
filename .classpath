@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry excluding="building/elevator/|interface/|person/handler/|person/entities/|building/floor/|stats/|building/|simulator/" kind="src" path="Java/uk/ac/aston/jpd/coursework/officebuilding"/>
+	<classpathentry excluding="elevator/|floor/" kind="src" path="Java/uk/ac/aston/jpd/coursework/officebuilding/building"/>
+	<classpathentry kind="src" path="Java/uk/ac/aston/jpd/coursework/officebuilding/building/elevator"/>
+	<classpathentry kind="src" path="Java/uk/ac/aston/jpd/coursework/officebuilding/building/floor"/>
+	<classpathentry kind="src" path="Java/uk/ac/aston/jpd/coursework/officebuilding/interface"/>
+	<classpathentry kind="src" path="Java/uk/ac/aston/jpd/coursework/officebuilding/person/entities"/>
+	<classpathentry kind="src" path="Java/uk/ac/aston/jpd/coursework/officebuilding/person/handler"/>
+	<classpathentry kind="src" path="Java/uk/ac/aston/jpd/coursework/officebuilding/simulator"/>
+	<classpathentry kind="src" path="Java/uk/ac/aston/jpd/coursework/officebuilding/stats"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
