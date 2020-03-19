@@ -6,6 +6,7 @@ import java.util.List;
 import uk.ac.aston.jpd.coursework.officebuilding.person.handler.PeopleHandler;
 import uk.ac.aston.jpd.coursework.officebuilding.building.Building;
 import uk.ac.aston.jpd.coursework.officebuilding.building.elevator.Elevator;
+import uk.ac.aston.jpd.coursework.officebuilding.building.elevator.ElevatorQueue;
 import uk.ac.aston.jpd.coursework.officebuilding.person.entities.Person;
 
 /**
@@ -16,22 +17,22 @@ import uk.ac.aston.jpd.coursework.officebuilding.person.entities.Person;
 public class Simulator {
 	
 	protected int tick;
-	private int employeeno;
-	private int developerno;
-	private final int floorno;
+	private final int EMPNO;
+	private final int DEVNO;
+	private final static int FLOORNO = 7;
 	private PeopleHandler peopleHandle;
 	private Building building;
+	public static final int MAXCAPACITY = 4;
 	
 	/**
 	 * Creates a simulator
 	 * @param elevator The elevator within the building
 	 */
-	public Simulator(Elevator elevator) {
-		this.employeeno = 0;
-		this.developerno = 0;
-		this.floorno = 7;
+	public Simulator(Building building) {
+		this.EMPNO = 0;
+		this.DEVNO = 0;
+		this.building = new Building(generateElevator());
 		this.peopleHandle = new PeopleHandler();
-		this.building = new Building();
 	}
 	
 	/**
@@ -41,27 +42,30 @@ public class Simulator {
 		
 	}
 	
-	/**
-	 * Sets the number of employees in the building
-	 * @param employeeno The number of employees
-	 */
-	private void setNoEmployees(int employeeno) {
-		this.employeeno = employeeno;
-	}
-	
-	/**
-	 * Sets the number of developers in the building
-	 * @param developerno The number of developers
-	 */
-	private void setNoDevs(int developerno) {
-		this.developerno = developerno;
-	}
+	// May not be needed as final fields are initialised in the constructor.
+	//
+	//	**
+	//	 * Sets the number of employees in the building
+	//	 * @param employeeno The number of employees
+	//	 */
+	//	private void setNoEmployees(int employeeno) {
+	//		this.EMPNO = employeeno;
+	//	}
+	//	
+	//	/**
+	//	 * Sets the number of developers in the building
+	//	 * @param developerno The number of developers
+	//	 */
+	//	private void setNoDevs(int developerno) {
+	//		this.DEVNO = developerno;
+	//	}
+	//	
 	
 	/**
 	 * Creates the elevator
 	 */
-	public void generateElevator() { 
-		
+	public Elevator generateElevator() { 
+		return new Elevator(new ElevatorQueue());
 	}
 	
 	/**
@@ -84,7 +88,7 @@ public class Simulator {
 	 * 
 	 * @param people
 	 */
-	public void setOnloadPeople(Person[] people) {
+	public void setOnloadPeople(Person[] people, int capacityAllowed) {
 		
 	}
 	

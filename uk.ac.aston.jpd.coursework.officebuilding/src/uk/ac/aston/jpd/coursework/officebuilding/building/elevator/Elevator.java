@@ -15,8 +15,8 @@ public class Elevator {
 	private int destination;
 	private int currentFloor;
 	
-	public Elevator(ElevatorQueue queue, int maxCapacity) {
-		MAXCAPACITY = maxCapacity;
+	public Elevator(ElevatorQueue queue) {
+		MAXCAPACITY = Simulator.MAXCAPACITY;
 		currentCapacity = 0;
 		state = "idle";
 		isMovement = false; // true = moving, false = still
