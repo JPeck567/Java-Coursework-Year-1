@@ -10,7 +10,6 @@ import java.util.List;
 public class Building {
 	//declaring fields
 	private Floor[] floors;
-	private int noOfFloors; //  already have an array not necessary
 	private Elevator elevator;
 	
 	
