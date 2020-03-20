@@ -11,12 +11,12 @@ public class Elevator {
 	private String state;
 	private boolean isMovement;
 	private boolean isDoorOpen;
-	private ElevatorQueue queue;
+	private ElevatorQueue queue; //space to hold people to get in the elevator to correct
 	private int destination;
 	private int currentFloor;
 	
 	public Elevator(ElevatorQueue queue) {
-		MAXCAPACITY = Simulator.MAXCAPACITY;
+		MAXCAPACITY = Simulator.MAXCAPACITY; //
 		currentCapacity = 0;
 		state = "idle";
 		isMovement = false; // true = moving, false = still
