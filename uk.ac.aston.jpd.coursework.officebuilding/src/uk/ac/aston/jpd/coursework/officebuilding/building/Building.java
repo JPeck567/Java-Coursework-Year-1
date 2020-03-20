@@ -1,34 +1,38 @@
 package uk.ac.aston.jpd.coursework.officebuilding.building;
 
+import uk.ac.aston.jpd.coursework.officebuilding.building.elevator.Elevator;
+import uk.ac.aston.jpd.coursework.officebuilding.building.floor.Floor;
+import uk.ac.aston.jpd.coursework.officebuilding.simulator.Simulator;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import uk.ac.aston.jpd.coursework.officebuilding.building.elevator.Elevator;
-import uk.ac.aston.jpd.coursework.officebuilding.building.floor.Floor;
-
 public class Building {
 	//declaring fields
-	private List <Floor> floors = new ArrayList <Floor>();;
+	private Floor[] floors;
+	private int noOfFloors
 	private Elevator elevator;
 	
+	
 	//constuctor
-	public Building (Elevator e, int floors){
-	this.floors = floors; 
+	public Building (Elevator e, int noOfFloors){
+		this.elevator = e;
+		this.noOfFloors = noOfFloors;
+		generateFloors();
 	}
 	
-	public void tick(){
+	public void tick(Simulator sim){
 	elevator.tick();
 		for (Floor f : floors){
-		f.tick();
+			f.tick();
 		}
 	}
 	private int generateFloors(){
-		for(int i = 0; i <8; i++){
-			Floor f = new Floor(i);
-			floor.add(f);
+		for(int i = 0; i < noOfFloors; i++){
+			floors[i] = new Floor(i);
 		}
 	}
 	public int getNumberOfFloor(){
-	return floors.size();
+		return floors.size();
 	}
 }
