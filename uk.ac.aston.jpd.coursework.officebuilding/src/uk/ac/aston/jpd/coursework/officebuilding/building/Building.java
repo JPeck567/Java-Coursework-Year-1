@@ -1,12 +1,18 @@
 package uk.ac.aston.jpd.coursework.officebuilding.building;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import uk.ac.aston.jpd.coursework.officebuilding.building.elevator.Elevator;
+import uk.ac.aston.jpd.coursework.officebuilding.building.floor.Floor;
+
 public class Building {
 	//declaring fields
 	private List <Floor> floors = new ArrayList <Floor>();;
 	private Elevator elevator;
 	
 	//constuctor
-	public Building (int floors){
+	public Building (Elevator e, int floors){
 	this.floors = floors; 
 	}
 	

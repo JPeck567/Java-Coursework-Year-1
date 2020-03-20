@@ -25,13 +25,13 @@ public class Simulator {
 	public static final int MAXCAPACITY = 4;
 	
 	/**
-	 * Creates a simulator
+	 * Constructor that creates a simulator
 	 * @param elevator The elevator within the building
 	 */
 	public Simulator(Building building) {
 		this.EMPNO = 0;
 		this.DEVNO = 0;
-		this.building = new Building(generateElevator());
+		this.building = new Building(generateElevator(), FLOORNO);
 		this.peopleHandle = new PeopleHandler();
 	}
 	
@@ -39,7 +39,7 @@ public class Simulator {
 	 * Is the clock that propagates the program
 	 */
 	private void tick() {
-		
+		building.tick();
 	}
 	
 	// May not be needed as final fields are initialised in the constructor.
@@ -90,6 +90,10 @@ public class Simulator {
 	 */
 	public void setOnloadPeople(Person[] people, int capacityAllowed) {
 		
+		//changes state to travelling.
+		for(Person p: people) {
+			peopleHandle.changePersonState(people[i]);
+		}
 	}
 	
 }
