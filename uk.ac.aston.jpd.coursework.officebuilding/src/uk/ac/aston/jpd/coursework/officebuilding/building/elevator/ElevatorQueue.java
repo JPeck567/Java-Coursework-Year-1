@@ -8,6 +8,9 @@ import java.util.Queue;
 
 import uk.ac.aston.jpd.coursework.officebuilding.person.entities.Person;
 
+
+//simplify by making just a queue
+//just let elevator go up and down.
 public class ElevatorQueue {
 	private Queue<Person> goingUp;
 	private Queue<Person> goingDown;
@@ -17,5 +20,6 @@ public class ElevatorQueue {
 		goingDown = new PriorityQueue<Person>();
 	}
 	
-	public getOffloadQueue
+	public getOffloadQueue(){
+	}
 }
