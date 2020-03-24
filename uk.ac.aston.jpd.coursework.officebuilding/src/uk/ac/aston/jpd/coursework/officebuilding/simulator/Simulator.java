@@ -4,9 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import uk.ac.aston.jpd.coursework.officebuilding.person.handler.PeopleHandler;
+import uk.ac.aston.jpd.coursework.officebuilding.person.handler.PersonHandler;
 import uk.ac.aston.jpd.coursework.officebuilding.building.Building;
 import uk.ac.aston.jpd.coursework.officebuilding.building.elevator.Elevator;
-import uk.ac.aston.jpd.coursework.officebuilding.building.elevator.ElevatorQueue;
+import uk.ac.aston.jpd.coursework.officebuilding.building.elevator.PQueue;
 import uk.ac.aston.jpd.coursework.officebuilding.person.entities.Person;
 
 /**
@@ -20,7 +21,7 @@ public class Simulator {
 	private final int EMPNO;
 	private final int DEVNO;
 	private final static int FLOORNO = 7;
-	private PeopleHandler peopleHandle;
+	private PersonHandler peopleHandle;
 	private Building building;
 	public static final int MAXCAPACITY = 4;
 	
@@ -32,7 +33,7 @@ public class Simulator {
 		this.EMPNO = 0;
 		this.DEVNO = 0;
 		this.building = new Building(generateElevator(), FLOORNO);
-		this.peopleHandle = new PeopleHandler();
+		this.peopleHandle = new PersonHandler();
 	}
 	
 	/**
@@ -65,7 +66,7 @@ public class Simulator {
 	 * Creates the elevator
 	 */
 	public Elevator generateElevator() { 
-		return new Elevator(new ElevatorQueue());
+		return new Elevator(new PQueue());
 	}
 	
 	/**
@@ -88,12 +89,10 @@ public class Simulator {
 	 * 
 	 * @param people
 	 */
-	public void setOnloadPeople(Person[] people, int capacityAllowed) {
+	public void setOnloadPeople(int[] people) {
 		
 		//changes state to travelling.
-		for(Person p: people) {
-			peopleHandle.changePersonState(people[i]);
-		}
+		peopleHandle.changePeoplesState(people);
 	}
 	
 }

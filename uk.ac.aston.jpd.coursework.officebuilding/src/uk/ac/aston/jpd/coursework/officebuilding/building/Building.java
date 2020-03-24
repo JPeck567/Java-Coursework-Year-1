@@ -11,27 +11,34 @@ public class Building {
 	//declaring fields
 	private Floor[] floors;
 	private Elevator elevator;
+	private final int NOOFFLOORS; // constant and doesn't change
 	
 	
-	//constuctor
+	// constuctor
 	public Building (Elevator e, int noOfFloors){
 		this.elevator = e;
-		this.noOfFloors = noOfFloors;
+		this.NOOFFLOORS = noOfFloors;
 		generateFloors();
 	}
 	
 	public void tick(Simulator sim){
-	elevator.tick();
-		for (Floor f : floors){
-			f.tick();
+		elevator.tick();
+			for (Floor f : floors){
+				f.tick();
+			}
 		}
-	}
+	
 	private int generateFloors(){
 		for(int i = 0; i < noOfFloors; i++){
 			floors[i] = new Floor(i);
 		}
 	}
+	
 	public int getNumberOfFloor(){
 		return floors.length;
+	}
+	
+	public Floor getFloor(int floorNumber) {
+		return floors[floorNumber];
 	}
 }

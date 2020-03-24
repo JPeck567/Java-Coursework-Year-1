@@ -1,5 +1,7 @@
 package uk.ac.aston.jpd.coursework.officebuilding.building.elevator;
 
+import java.util.ArrayList;
+
 import uk.ac.aston.jpd.coursework.officebuilding.building.Building;
 import uk.ac.aston.jpd.coursework.officebuilding.building.floor.Floor;
 import uk.ac.aston.jpd.coursework.officebuilding.simulator.Simulator;
@@ -10,29 +12,37 @@ public class Elevator {
 	private int currentCapacity;
 	private String state;
 	private boolean isMovement;
-	private boolean isDoorOpen;
-	private ElevatorQueue queue; //space to hold people to get in the elevator to correct
+	private PQueue queue; //space to hold people to get in the elevator to correct
 	private int destination;
 	private int currentFloor;
 	
-	public Elevator(ElevatorQueue queue) {
+	public Elevator(PQueue queue) {
 		MAXCAPACITY = Simulator.MAXCAPACITY; //
 		currentCapacity = 0;
-		state = "idle";
-		isMovement = false; // true = moving, false = still
-		isDoorOpen = false; // true = open, false = closed
+		state = "ready"; // either ready, meaning already off/onloaded and ready to go, or open, where off/onloading is in process. way of knowing if door needs to be closed or opened
+		isMovement = false; // true = moving, false = idle
 		this.queue = queue;
 		destination = 0;
 		currentFloor = 0;
 	}
 	
-	public void tick(Simulator sim, Floor currentFloorObj) { // implement with switch case?
-		if(currentFloor != destination) {
-			moveFloor(currentFloor - destination);
-		} else if(!isDoorOpen) { // implies the elevator is at its destination + door is not open
-			toggleDoor();
-		} else if 
-		// TODO: from here!
+	public void tick(Simulator sim, Building bld) { // implement with switch case?
+		if(currentFloor == destination) { // operations related to when elevator is at the floor it needs to be at
+			if(isMovement) {
+				isMovement = !isMovement; // stops movement and implies door is open
+				state = "open";
+			} else if (state.equals("open")) {
+				offloadPeople(sim); // doors are open, so flow of people going in and out
+				onloadPeople(sim, bld, queue.getSize());
+			} else {  // if not at destination, but ready to move to next dest. implies closing of door
+				isMovement = !isMovement;
+				state = "ready";
+				queue.getNextDestination(sim, currentFloor);
+			}
+		} else {
+			moveFloor(destination - currentFloor);
+		}
+		
 	}
 	
 	private void moveFloor (int direction) {
@@ -44,13 +54,14 @@ public class Elevator {
 	}
 	
 	private void offloadPeople(Simulator sim) {
-		sim.setOffloadPeople(queue.getOffloadPeople());
+		sim.setOffloadPeople(queue.getOffloadPeople(currentFloor)); // removes people from queue and set their person object state/current location
 	}
 	
 	private void onloadPeople(Simulator sim, Building bld, int capacityAllowance) {
 		Floor fl = bld.getFloor(currentFloor);
-		Person[] people = fl.removeFromQueue(capacityAllowance);
-		sim.setOnloadPeople(people);
+		int[] people = fl.removeFromQueue(capacityAllowance); // gets a certain number of people from the floor queue
+		queue.addOnloadPeople(people);
+		sim.setOnloadPeople(people); // sets people to travelling state
 	}
 	
 	private void toggleDoor() {
