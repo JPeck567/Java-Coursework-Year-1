@@ -1,5 +1,12 @@
 package uk.ac.aston.jpd.coursework.officebuilding.building;
-
+/*
+*  The building class indicated what the building core contents
+*  is currently the elevator
+*
+*  @auther 	Jennifer A. Appiah
+*  @version 1.0
+*  @since 2020
+*/
 import uk.ac.aston.jpd.coursework.officebuilding.building.elevator.Elevator;
 import uk.ac.aston.jpd.coursework.officebuilding.building.elevator.PQueue;
 import uk.ac.aston.jpd.coursework.officebuilding.building.floor.Floor;
