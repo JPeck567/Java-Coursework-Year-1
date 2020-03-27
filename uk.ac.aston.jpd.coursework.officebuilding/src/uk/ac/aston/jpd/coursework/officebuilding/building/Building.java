@@ -27,7 +27,7 @@ public class Building {
 	
  /*
  *
- * Class constructor constructing the elevator and generating floors.
+ * Class constructor constructing the elevator.
  */
 	public Building (Elevator e){
 		this.elevator = e;
