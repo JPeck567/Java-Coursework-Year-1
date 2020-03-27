@@ -1,6 +1,7 @@
 package uk.ac.aston.jpd.coursework.officebuilding.building;
 
 import uk.ac.aston.jpd.coursework.officebuilding.building.elevator.Elevator;
+import uk.ac.aston.jpd.coursework.officebuilding.building.elevator.PQueue;
 import uk.ac.aston.jpd.coursework.officebuilding.building.floor.Floor;
 import uk.ac.aston.jpd.coursework.officebuilding.simulator.Simulator;
 
@@ -11,26 +12,26 @@ public class Building {
 	//declaring fields
 	private Floor[] floors;
 	private Elevator elevator;
-	private final int NOOFFLOORS; // constant and doesn't change
+	// private final int NOOFFLOORS; constant and doesn't change. Taken out ask you can just ref simulators constant
 	
 	
 	// constuctor
-	public Building (Elevator e, int noOfFloors){
+	public Building (Elevator e){
 		this.elevator = e;
-		this.NOOFFLOORS = noOfFloors;
 		generateFloors();
 	}
 	
 	public void tick(Simulator sim){
-		elevator.tick();
+		elevator.tick(sim, this);
 			for (Floor f : floors){
 				f.tick();
 			}
 		}
 	
-	private int generateFloors(){
-		for(int i = 0; i < noOfFloors; i++){
-			floors[i] = new Floor(i);
+	private void generateFloors(){
+		
+		for(int i = 0; i < Simulator.FLOORNO; i++){
+			floors[i] = new Floor(i, new PQueue(100)); // queues on each floor are 
 		}
 	}
 	

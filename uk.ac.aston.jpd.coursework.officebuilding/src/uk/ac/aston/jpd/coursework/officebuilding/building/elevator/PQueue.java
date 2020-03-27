@@ -15,39 +15,52 @@ import uk.ac.aston.jpd.coursework.officebuilding.simulator.Simulator;
 //simplify by making just a queue
 //just let elevator go up and down.
 public class PQueue {
-	private Queue<Integer> queue;
+	private List<Integer> queue;
 	private final int SIZE;
 	
 	public PQueue(int size) {
 		this.SIZE = size;
-		queue = new LinkedList<Integer>();
+		queue = new ArrayList<Integer>();
 	}
 	
-	public ArrayList<Integer> getOffloadPeople(int floor) {
+	public ArrayList<Integer> getOffloadPeople(int floor, Simulator sim) { // returns people who want to get off at floor id and removes from queue
 		ArrayList<Integer> offload = new ArrayList<Integer>();
-		for(int pID: queue) {
-			if(pID == floor) {
+		
+		for(int i; i <= queue.size(); i++) {
+			int pID = queue.get(i);
+			
+			if(sim.getPerson(pID).getDestination() == floor) {
+				queue.remove(i);
 				offload.add(pID);
 			}
+			
 		}
+		sim.setOffloadPeople(offload);
 		return offload;
 	}
 	
-	public void addOnloadPeople(int[] people) {
+	public void addOnloadPeople(currentFloor, int[] people) {
 		for(int pID: people) {
 			queue.add(pID);
 		}
 	}
 	
-	public int getSize() {
+	public int getSpaces() {
 		return SIZE - queue.size();
 	}
 	
-	public int getNextDestination(Simulator sim, int direction) {
-		return Collections.max(queue); // the highest floor is returned
+	public void getNextDestination(int currentFloor) {
+		
 	}
 	
-	private void nextFloor(){
+	public boolean isEmpty() {
+		return queue.isEmpty();
 	}
+	
+	private void nextFloor() {
+		
+	}
+	
+	
 	
 }

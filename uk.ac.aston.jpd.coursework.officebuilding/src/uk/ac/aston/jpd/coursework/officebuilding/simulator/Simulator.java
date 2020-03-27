@@ -3,7 +3,6 @@ package uk.ac.aston.jpd.coursework.officebuilding.simulator;
 import java.util.ArrayList;
 import java.util.List;
 
-import uk.ac.aston.jpd.coursework.officebuilding.person.handler.PeopleHandler;
 import uk.ac.aston.jpd.coursework.officebuilding.person.handler.PersonHandler;
 import uk.ac.aston.jpd.coursework.officebuilding.building.Building;
 import uk.ac.aston.jpd.coursework.officebuilding.building.elevator.Elevator;
@@ -20,19 +19,19 @@ public class Simulator {
 	protected int tick;
 	private final int EMPNO;
 	private final int DEVNO;
-	private final static int FLOORNO = 7;
 	private PersonHandler peopleHandle;
 	private Building building;
-	public static final int MAXCAPACITY = 4;
+	public final static int FLOORNO = 7;
+	public final static int MAXCAPACITY = 4;
 	
 	/**
 	 * Constructor that creates a simulator
 	 * @param elevator The elevator within the building
 	 */
-	public Simulator(Building building) {
+	public Simulator() {
 		this.EMPNO = 0;
 		this.DEVNO = 0;
-		this.building = new Building(generateElevator(), FLOORNO);
+		this.building = new Building(generateElevator());
 		this.peopleHandle = new PersonHandler();
 	}
 	
@@ -40,7 +39,8 @@ public class Simulator {
 	 * Is the clock that propagates the program
 	 */
 	private void tick() {
-		building.tick();
+		tick += 1;
+		building.tick(this);
 	}
 	
 	// May not be needed as final fields are initialised in the constructor.
@@ -66,7 +66,7 @@ public class Simulator {
 	 * Creates the elevator
 	 */
 	public Elevator generateElevator() { 
-		return new Elevator(new PQueue());
+		return new Elevator(new PQueue(Simulator.MAXCAPACITY));
 	}
 	
 	/**
@@ -77,11 +77,15 @@ public class Simulator {
 		return building;
 	}
 	
+	public Person getPerson(int pID) {
+		return peopleHandle.getPerson(pID);
+	}
+	
 	/**
 	 * 
 	 * @param people
 	 */
-	public void setOffloadPeople(List<Integer> people) {
+	public void setOffloadPeople(List<Integer> people) { // offload = persons dest is also now persons location
 		
 	}
 	
@@ -89,10 +93,11 @@ public class Simulator {
 	 * 
 	 * @param people
 	 */
-	public void setOnloadPeople(int[] people) {
+	public void setOnloadPeople(int[] people) { // onload = persons current location is the elevator, set as -1?
 		
 		//changes state to travelling.
-		peopleHandle.changePeoplesState(people);
+		peopleHandle.changePeoplesStates(people, -1);
 	}
+	
 	
 }
