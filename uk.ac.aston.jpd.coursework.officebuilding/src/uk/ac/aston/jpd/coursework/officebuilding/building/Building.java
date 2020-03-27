@@ -16,13 +16,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Building {
-	//declaring fields
-	private Floor[] floors;
+/*
+*
+*  declaring fields 
+* 
+*/	private Floor[] floors;
 	private Elevator elevator;
 	// private final int NOOFFLOORS; constant and doesn't change. Taken out ask you can just ref simulators constant
 	
 	
-	// constuctor
+ /*
+ *
+ * Class constructor constructing the elevator and generating floors.
+ */
 	public Building (Elevator e){
 		this.elevator = e;
 		generateFloors();
