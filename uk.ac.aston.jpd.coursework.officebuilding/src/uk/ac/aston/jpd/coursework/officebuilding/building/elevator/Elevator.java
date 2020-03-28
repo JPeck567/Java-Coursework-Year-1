@@ -1,8 +1,12 @@
 package uk.ac.aston.jpd.coursework.officebuilding.building.elevator;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import uk.ac.aston.jpd.coursework.officebuilding.building.Building;
+import uk.ac.aston.jpd.coursework.officebuilding.building.PQueue;
 import uk.ac.aston.jpd.coursework.officebuilding.building.floor.Floor;
 import uk.ac.aston.jpd.coursework.officebuilding.simulator.Simulator;
 import uk.ac.aston.jpd.coursework.officebuilding.person.entities.Person;
@@ -12,17 +16,21 @@ public class Elevator {
 	private int currentCapacity;
 	private String state;
 	private boolean isMovement;
-	private PQueue queue; //space to hold people to get in the elevator to correct
+	private PQueue queue; //space to hold people to get in the elevator
+	private Map<Integer, ArrayList<Integer>> requestsList; // to know where people are to get in lift
 	private int destination;
 	private int currentFloor;
 	
 	public Elevator(PQueue queue) {
 		currentCapacity = 0;
-		state = "ready"; // either ready, meaning already off/onloaded and ready to go, or open, where off/onloading is in process. way of knowing if door needs to be closed or opened
-		isMovement = false; // true = moving, false = idle
-		this.queue = queue;
 		destination = 0;
 		currentFloor = 0;
+		state = "ready"; // either ready, meaning already off/onloaded and ready to go, or open, where off/onloading is in process. way of knowing if door needs to be closed or opened
+		isMovement = false; // true = moving, false = idle
+		
+		this.queue = queue;
+		requestsList = new HashMap<Integer, ArrayList<Integer>>();
+		
 	}
 	
 	public void tick(Simulator sim, Building bld) { // each tick, elevator is on a floor
@@ -34,9 +42,8 @@ public class Elevator {
 				
 			} else if (state.equals("open")) {
 				offloadPeople(sim); // doors are open, so flow of people going in and out
-				checkFloor(sim, bld); // checks if anyone to move to lift, and does so if so.
 				
-			} else {  // if not at destination, but ready to move to next dest. implies closing of door
+			} else {  // door is to close and next dest is found
 				isMovement = !isMovement;
 				state = "ready";
 				queue.getNextDestination(currentFloor);
@@ -59,15 +66,7 @@ public class Elevator {
 	}
 	
 	private void moveFloor (int direction) {
-		
-		
-		// if(direction > 0) {  // going up
-		// 	currentFloor -= 1;
-		// } else if(direction < 0) { // going down
-		// 	currentFloor += 1;
-		// } else { // is idle, so no direction
-		// 	return;
-		// }
+		if(currentFloor != 6)
 	}
 	
 	private void offloadPeople(Simulator sim) { 
@@ -84,7 +83,18 @@ public class Elevator {
 		sim.setOnloadPeople(people); // sets people to travelling state
 	}
 	
-	public boolean getDirection() { 
+	public void addRequests(int floorNo, ArrayList<Integer> pIDs) { // adds a list of people who pressed the button to a map of floors to people who want to get the lift
+		for(int ID: pIDs) {
+			if(!requestsList.containsKey(floorNo)) {
+				ArrayList<Integer> req = requestsList.get(ID);
+				req.add(ID);
+				requestsList.put(floorNo, req);
+			}
+		}
+		
+	}
+	
+	public int getDirection() { 
 		return destination - currentFloor;
 	}
 	

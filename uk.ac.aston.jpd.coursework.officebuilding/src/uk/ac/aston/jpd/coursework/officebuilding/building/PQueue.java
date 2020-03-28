@@ -1,4 +1,4 @@
-package uk.ac.aston.jpd.coursework.officebuilding.building.elevator;
+package uk.ac.aston.jpd.coursework.officebuilding.building;
 
 import java.util.ArrayList;
 import java.util.Collection;
