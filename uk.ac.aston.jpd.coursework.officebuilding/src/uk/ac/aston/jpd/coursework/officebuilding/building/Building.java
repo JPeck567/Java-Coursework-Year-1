@@ -8,7 +8,6 @@ package uk.ac.aston.jpd.coursework.officebuilding.building;
 *  @since 2020
 */
 import uk.ac.aston.jpd.coursework.officebuilding.building.elevator.Elevator;
-import uk.ac.aston.jpd.coursework.officebuilding.building.elevator.PQueue;
 import uk.ac.aston.jpd.coursework.officebuilding.building.floor.Floor;
 import uk.ac.aston.jpd.coursework.officebuilding.simulator.Simulator;
 
@@ -22,7 +21,7 @@ public class Building {
 * 
 */	private Floor[] floors;
 	private Elevator elevator;
-	// private final int NOOFFLOORS; constant and doesn't change. Taken out ask you can just ref simulators constant
+	// private final int NOOFFLOORS; constant and doesn't change. Not used as you can just ref simulators constant
 	
 	
  /*
@@ -36,15 +35,15 @@ public class Building {
 	
 	public void tick(Simulator sim){
 		elevator.tick(sim, this);
-			for (Floor f : floors){
-				f.tick();
-			}
+		
+		for (Floor f : floors){
+			f.tick(this);
 		}
+	}
 	
 	private void generateFloors(){
-		
 		for(int i = 0; i < Simulator.FLOORNO; i++){
-			floors[i] = new Floor(i, new PQueue(100)); // queues on each floor are 
+			floors[i] = new Floor(i, new PQueue(100), new Button(i)); // the size of each floor are arbitrary, as long as large enough for every person.
 		}
 	}
 	
@@ -54,5 +53,9 @@ public class Building {
 	
 	public Floor getFloor(int floorNumber) {
 		return floors[floorNumber];
+	}
+	
+	public void addRequests(int floorNo, ArrayList<Integer> requestList) {
+		elevator.addRequests(floorNo, requestList);
 	}
 }

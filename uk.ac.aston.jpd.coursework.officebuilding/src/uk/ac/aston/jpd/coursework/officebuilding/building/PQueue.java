@@ -1,4 +1,4 @@
-package uk.ac.aston.jpd.coursework.officebuilding.building.elevator;
+package uk.ac.aston.jpd.coursework.officebuilding.building;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -39,7 +39,7 @@ public class PQueue {
 		return offload;
 	}
 	
-	public void addOnloadPeople(currentFloor, int[] people) {
+	public void addOnloadPeople(int currentFloor, int[] people) {
 		for(int pID: people) {
 			queue.add(pID);
 		}

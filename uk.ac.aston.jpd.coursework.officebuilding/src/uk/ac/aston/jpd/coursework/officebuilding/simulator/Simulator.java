@@ -5,8 +5,8 @@ import java.util.List;
 
 import uk.ac.aston.jpd.coursework.officebuilding.person.handler.PersonHandler;
 import uk.ac.aston.jpd.coursework.officebuilding.building.Building;
+import uk.ac.aston.jpd.coursework.officebuilding.building.PQueue;
 import uk.ac.aston.jpd.coursework.officebuilding.building.elevator.Elevator;
-import uk.ac.aston.jpd.coursework.officebuilding.building.elevator.PQueue;
 import uk.ac.aston.jpd.coursework.officebuilding.person.entities.Person;
 
 /**
