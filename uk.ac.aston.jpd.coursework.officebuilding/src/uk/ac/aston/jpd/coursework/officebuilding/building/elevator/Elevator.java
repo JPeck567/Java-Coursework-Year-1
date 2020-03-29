@@ -50,7 +50,7 @@ public class Elevator {
 			}
 			
 		} else { // not at dest, but will check if current floor has people to load on
-			checkFloor(sim, bld);
+			//checkFloor(sim, bld);
 			moveFloor(getDirection());
 		}
 	}
@@ -62,11 +62,10 @@ public class Elevator {
 				onloadPeople(sim, bld, spaces);
 			}
 		}
-		
 	}
 	
 	private void moveFloor (int direction) {
-		if(currentFloor != 6)
+
 	}
 	
 	private void offloadPeople(Simulator sim) { 
@@ -91,7 +90,6 @@ public class Elevator {
 				requestsList.put(floorNo, req);
 			}
 		}
-		
 	}
 	
 	public int getDirection() { 

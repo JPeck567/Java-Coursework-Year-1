@@ -2,6 +2,7 @@ package uk.ac.aston.jpd.coursework.officebuilding.simulator;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.lang.Thread;
 
 import uk.ac.aston.jpd.coursework.officebuilding.person.handler.PersonHandler;
 import uk.ac.aston.jpd.coursework.officebuilding.building.Building;
@@ -28,19 +29,24 @@ public class Simulator {
 	 * Constructor that creates a simulator
 	 * @param elevator The elevator within the building
 	 */
-	public Simulator() {
-		this.EMPNO = 0;
-		this.DEVNO = 0;
+	public Simulator(int empNo, int devNo) {
+		this.EMPNO = empNo;
+		this.DEVNO = devNo;
 		this.building = new Building(generateElevator());
 		this.peopleHandle = new PersonHandler();
 	}
 	
+	private void run() {
+		// while loop to call tick() every second using java.lang.Thread.sleep(milliseconds)
+	}
+
 	/**
 	 * Is the clock that propagates the program
 	 */
-	private void tick() {
+	public void tick() {
 		tick += 1;
 		building.tick(this);
+		// tick functions related to persons/stats etc
 	}
 	
 	// May not be needed as final fields are initialised in the constructor.
@@ -65,7 +71,7 @@ public class Simulator {
 	/**
 	 * Creates the elevator
 	 */
-	public Elevator generateElevator() { 
+	private Elevator generateElevator() { 
 		return new Elevator(new PQueue(Simulator.MAXCAPACITY));
 	}
 	
