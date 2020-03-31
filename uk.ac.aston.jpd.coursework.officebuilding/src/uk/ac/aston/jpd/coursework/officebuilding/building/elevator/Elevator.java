@@ -23,10 +23,10 @@ public class Elevator {
 	
 	public Elevator(PQueue queue) {
 		currentCapacity = 0;
-		destination = 0;
+		destination = 6;
 		currentFloor = 0;
 		state = "ready"; // either ready, meaning already off/onloaded and ready to go, or open, where off/onloading is in process. way of knowing if door needs to be closed or opened
-		isMovement = false; // true = moving, false = idle
+		isMovement = true; // true = moving, false = idle
 		
 		this.queue = queue;
 		requestsList = new HashMap<Integer, ArrayList<Integer>>();
@@ -36,22 +36,28 @@ public class Elevator {
 	public void tick(Simulator sim, Building bld) { // each tick, elevator is on a floor
 		if(currentFloor == destination) { // operations related to when elevator is at the floor it needs to be at
 			
-			if(isMovement) {
+			if(isMovement) { 
 				isMovement = !isMovement; // stops movement and implies door is open
 				state = "open";
-				
-			} else if (state.equals("open")) {
-				offloadPeople(sim); // doors are open, so flow of people going in and out
-				
-			} else {  // door is to close and next dest is found
-				isMovement = !isMovement;
-				state = "ready";
-				queue.getNextDestination(currentFloor);
-			}
+				System.out.println("Stopped at floor" + currentFloor);
 			
+			} else if(state.equals("open")) {
+				//offloadPeople(sim); // doors are open, so flow of people going in and out
+				// and get people from floor is so
+				state = "close";
+				System.out.println("Opening door");
+			  
+			} else if(state.equals("close")) { // door is to close and next dest is found isMovement = !isMovement;
+				state = "ready";
+				System.out.println("Closing door");
+				
+				destination = 0; // for initial run
+			}
+			 			
 		} else { // not at dest, but will check if current floor has people to load on
 			//checkFloor(sim, bld);
 			moveFloor(getDirection());
+			System.out.println("Moving to floor " + currentFloor);
 		}
 	}
 	
@@ -65,7 +71,10 @@ public class Elevator {
 	}
 	
 	private void moveFloor (int direction) {
-
+		if(direction < 0) {
+			currentFloor -= 1;
+		} else
+			currentFloor += 1;
 	}
 	
 	private void offloadPeople(Simulator sim) { 

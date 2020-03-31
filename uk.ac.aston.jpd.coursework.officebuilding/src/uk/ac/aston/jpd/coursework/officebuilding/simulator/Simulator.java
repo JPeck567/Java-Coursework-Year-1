@@ -20,6 +20,7 @@ public class Simulator {
 	protected int tick;
 	private final int EMPNO;
 	private final int DEVNO;
+	private final int SIMTIME;
 	private PersonHandler peopleHandle;
 	private Building building;
 	public final static int FLOORNO = 7;
@@ -29,44 +30,31 @@ public class Simulator {
 	 * Constructor that creates a simulator
 	 * @param elevator The elevator within the building
 	 */
-	public Simulator(int empNo, int devNo) {
+	public Simulator(int empNo, int devNo, int simTime) {
 		this.EMPNO = empNo;
 		this.DEVNO = devNo;
+		this.SIMTIME = simTime;  // 8hrs = 2880 ticks (as each tick is 10s)
 		this.building = new Building(generateElevator());
 		this.peopleHandle = new PersonHandler();
+		
+		// other stuff to do with people etc
 	}
 	
-	private void run() {
-		// while loop to call tick() every second using java.lang.Thread.sleep(milliseconds)
+	public void run() throws InterruptedException { // called by launcher
+		while(tick < SIMTIME) {
+			tick();
+			Thread.sleep(1000); // 1000ms = 1 second. Therefore in real life, each tick execution is ~ 1 second
+		}
 	}
 
 	/**
 	 * Is the clock that propagates the program
 	 */
-	public void tick() {
+	private void tick() {
 		tick += 1;
 		building.tick(this);
 		// tick functions related to persons/stats etc
 	}
-	
-	// May not be needed as final fields are initialised in the constructor.
-	//
-	//	**
-	//	 * Sets the number of employees in the building
-	//	 * @param employeeno The number of employees
-	//	 */
-	//	private void setNoEmployees(int employeeno) {
-	//		this.EMPNO = employeeno;
-	//	}
-	//	
-	//	/**
-	//	 * Sets the number of developers in the building
-	//	 * @param developerno The number of developers
-	//	 */
-	//	private void setNoDevs(int developerno) {
-	//		this.DEVNO = developerno;
-	//	}
-	//	
 	
 	/**
 	 * Creates the elevator
@@ -91,7 +79,7 @@ public class Simulator {
 	 * 
 	 * @param people
 	 */
-	public void setOffloadPeople(List<Integer> people) { // offload = persons dest is also now persons location
+	public void setOffloadPeople(List<Integer> people) { // offload = persons arrives at floor so their dest field is also the persons location
 		
 	}
 	

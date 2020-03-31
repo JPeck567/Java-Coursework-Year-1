@@ -21,8 +21,6 @@ public class Building {
 * 
 */	private Floor[] floors;
 	private Elevator elevator;
-	// private final int NOOFFLOORS; constant and doesn't change. Not used as you can just ref simulators constant
-	
 	
  /*
  *
@@ -30,15 +28,16 @@ public class Building {
  */
 	public Building (Elevator e){
 		this.elevator = e;
+		floors = new Floor[Simulator.FLOORNO];
 		generateFloors();
 	}
 	
 	public void tick(Simulator sim){
 		elevator.tick(sim, this);
 		
-		for (Floor f : floors){
-			f.tick(this);
-		}
+		//for (Floor f : floors){
+		//	f.tick(this);
+		//}
 	}
 	
 	private void generateFloors(){

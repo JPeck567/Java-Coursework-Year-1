@@ -49,17 +49,13 @@ public class PQueue {
 		return SIZE - queue.size();
 	}
 	
-	public void getNextDestination(int currentFloor) {
-		
-	}
+	public void getNextDestination(int currentFloor) { }
 	
 	public boolean isEmpty() {
 		return queue.isEmpty();
 	}
 	
-	private void nextFloor() {
-		
-	}
+	private void nextFloor() { }
 	
 	
 	

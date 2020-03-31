@@ -7,17 +7,18 @@ public class Launcher {
 	private Simulator sim;
 	
 	public Launcher() {
-		sim = new Simulator(0, 0);
+		sim = new Simulator(0, 0, 100);
 	}
 	
-	private void start() {
-		while(true) {
-			sim.tick();
-		}
+	private void start() throws InterruptedException {
+		sim.run();
 	}
 	
-	public static void main(String args[]) {
+	public static void main(String args[]) throws InterruptedException {
 		Launcher launch = new Launcher();
-		// where the whole programme begins
+		// where the whole programmes objects are all initialised
+		
+		launch.start();
+		// where the simulator is ran
 	}
 }
