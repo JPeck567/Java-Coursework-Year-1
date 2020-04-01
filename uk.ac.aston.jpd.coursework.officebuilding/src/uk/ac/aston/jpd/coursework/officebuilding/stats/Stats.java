@@ -2,7 +2,8 @@ package uk.ac.aston.jpd.coursework.officebuilding.stats;
 
 public class Stats {
 	// notes on:
-	
+	public Stats (){
+	}
 	//   finding probablility --
 	// 		is code to do so
 	// 			rnd is java.util.Random object
