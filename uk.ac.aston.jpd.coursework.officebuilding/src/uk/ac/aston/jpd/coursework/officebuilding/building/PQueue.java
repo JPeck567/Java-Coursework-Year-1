@@ -1,6 +1,7 @@
 package uk.ac.aston.jpd.coursework.officebuilding.building;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -23,15 +24,14 @@ public class PQueue {
 		queue = new ArrayList<Integer>();
 	}
 	
-	public ArrayList<Integer> getOffloadPeople(int floor, Simulator sim) { // returns people who want to get off at floor id and removes from queue
+	public ArrayList<Integer> removePeople(int floor, Simulator sim) { // returns people who want to get off at floor id and removes from queue
 		ArrayList<Integer> offload = new ArrayList<Integer>();
 		
 		for(int i = 0; i <= queue.size(); i++) {
 			int pID = queue.get(i);
 			
 			if(sim.getPerson(pID).getDestination() == floor) {
-				queue.remove(i);
-				offload.add(pID);
+				offload.add(queue.remove(i)); // remove from queue and add to 
 			}
 			
 		}
@@ -39,7 +39,7 @@ public class PQueue {
 		return offload;
 	}
 	
-	public void addOnloadPeople(int currentFloor, int[] people) {
+	public void addPeople(int[] people) {
 		for(int pID: people) {
 			queue.add(pID);
 		}

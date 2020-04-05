@@ -20,20 +20,19 @@ public class Simulator {
 	protected int tick;
 	private final int EMPNO;
 	private final int DEVNO;
-	private final int SIMTIME;
+	private static final int SIMTIME = 2880; // 8hrs = 2880 ticks (as each tick is 10s)
 	private PersonHandler peopleHandle;
 	private Building building;
-	public final static int FLOORNO = 7;
+	public final static int FLOORNO = 6;  // are 7 floors. quantified as 6 as 0 counts as a floor too
 	public final static int MAXCAPACITY = 4;
 	
 	/**
 	 * Constructor that creates a simulator
 	 * @param elevator The elevator within the building
 	 */
-	public Simulator(int empNo, int devNo, int simTime) {
+	public Simulator(int empNo, int devNo) {
 		this.EMPNO = empNo;
 		this.DEVNO = devNo;
-		this.SIMTIME = simTime;  // 8hrs = 2880 ticks (as each tick is 10s)
 		this.building = new Building(generateElevator());
 		this.peopleHandle = new PersonHandler();
 		
@@ -41,7 +40,7 @@ public class Simulator {
 	}
 	
 	public void run() throws InterruptedException { // called by launcher
-		while(tick < SIMTIME) {
+		while(tick <= SIMTIME) {
 			tick();
 			Thread.sleep(1000); // 1000ms = 1 second. Therefore in real life, each tick execution is ~ 1 second
 		}

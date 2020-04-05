@@ -5,7 +5,7 @@ import uk.ac.aston.jpd.coursework.officebuilding.person.entities.Person;
 public class PersonHandler {
 	
 	public PersonHandler() {
-		
+	
 	}
 	
 	public void changePeoplesStates(int[] people, int state) {

@@ -3,6 +3,8 @@ package uk.ac.aston.jpd.coursework.officebuilding.building;
 import java.util.ArrayList;
 import java.util.List;
 
+import uk.ac.aston.jpd.coursework.officebuilding.building.floor.Floor;
+
 public class Button {
 	private final int FLOORNO;
 	private ArrayList<Integer> pressedList;
@@ -16,15 +18,15 @@ public class Button {
 		pressedList.add(pID);
 	}
 	
-	public ArrayList<Integer> getPressed() {
+	public ArrayList<Integer> getPressed() {  // puts pressed to waiting
 		ArrayList<Integer> copy = pressedList;
 		pressedList.clear();
 		return copy;
 	}
 
-	public void tick(Building bld) {
+	public void tick(Floor floor) {
 		if(!pressedList.isEmpty()) {
-			bld.addRequests(FLOORNO, getPressed());
+			floor.addRequests(getPressed());
 		}
 	}
 }
