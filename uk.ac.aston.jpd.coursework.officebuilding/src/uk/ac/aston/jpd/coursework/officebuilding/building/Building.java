@@ -33,11 +33,11 @@ public class Building {
 	}
 	
 	public void tick(Simulator sim){
-		elevator.tick(sim, this);
-		
 		for (Floor f : floors){
 			f.tick(this);
 		}
+		
+		elevator.tick(sim, this);	
 	}
 	
 	private void generateFloors(){

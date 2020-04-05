@@ -72,25 +72,6 @@ public class Simulator {
 	
 	public Person getPerson(int pID) {
 		return peopleHandle.getPerson(pID);
-	}
-	
-	/**
-	 * 
-	 * @param people
-	 */
-	public void setOffloadPeople(List<Integer> people) { // offload = persons arrives at floor so their dest field is also the persons location
-		
-	}
-	
-	/**
-	 * 
-	 * @param people
-	 */
-	public void setOnloadPeople(int[] people) { // onload = persons current location is the elevator, set as -1?
-		
-		//changes state to travelling.
-		peopleHandle.changePeoplesStates(people, -1);
-	}
-	
+	}	
 	
 }

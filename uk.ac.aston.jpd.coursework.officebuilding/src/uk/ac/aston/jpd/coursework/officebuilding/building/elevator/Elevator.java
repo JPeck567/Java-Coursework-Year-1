@@ -63,7 +63,9 @@ public class Elevator {
 		
 		} else if(state.equals("open")) { // doors are open, so flow starts of people going out and possibly in
 			offloadPeople(sim); // people in queue needing to go out will do.
-			// TODO: people to get in will do by a floor give function, if enough room, and set req map to false is needed. people currFloor will = -1 (meaning on elevator)
+			// TODO: people to get in will do by a floor give function, if enough room
+			// set req map to false is needed
+			// people currFloor will = -1 (meaning on elevator)
 			state = "close";
 			System.out.println("Opening door");
 		    
@@ -75,8 +77,6 @@ public class Elevator {
 			// TODO: find new destination, by checking request list for currentfloor+n if going up, or currentFloor-n if going down
 			//		 if no people want to use lift, goto ground and set direction to 'I' for idle
 			setDirection(); // then sets direction based on new dest
-			
-			// destination = 0; // for initial run
 		}
 	}
 		
@@ -98,9 +98,8 @@ public class Elevator {
 	}
 		
 	private void offloadPeople(Simulator sim) {  // offloads people from lift if needed
-		ArrayList<Integer> offloaded = queue.removePeople(currentFloor, sim);
-		if(!offloaded.isEmpty()) {
-			// removes people from queue
+		ArrayList<Integer> offloaded = queue.removePeople(currentFloor, sim);  // gets people who need to get to current floor + removes from lift queue
+		if(!offloaded.isEmpty()) { // given there are people to get off
 			// TODO: set their person object state/current location (sim - peopleHandle)
 			// TODO: then put to list on the floor
 		}
@@ -111,7 +110,7 @@ public class Elevator {
 			Floor fl = bld.getFloor(currentFloor);
 			
 			// TODO: floor function to get remove ids from waiting, with specified amount.
-			// add req;s id to this queue
+			// add req's id to this queue
 			// sets people to travelling state (sim - peopleHandle)
 		}
 	}

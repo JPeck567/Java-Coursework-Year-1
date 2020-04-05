@@ -31,15 +31,14 @@ public class PQueue {
 			int pID = queue.get(i);
 			
 			if(sim.getPerson(pID).getDestination() == floor) {
-				offload.add(queue.remove(i)); // remove from queue and add to 
+				offload.add(queue.remove(i)); // remove from queue, and add to list to return
 			}
 			
 		}
-		sim.setOffloadPeople(offload);
 		return offload;
 	}
 	
-	public void addPeople(int[] people) {
+	public void addPeople(ArrayList<Integer> people) {
 		for(int pID: people) {
 			queue.add(pID);
 		}
