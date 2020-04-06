@@ -7,7 +7,7 @@ public class Launcher {
 	private Simulator sim;
 	
 	public Launcher() {
-		sim = new Simulator(0, 0);
+		sim = new Simulator(0, 0, 0);  // empNo, devNo and the seed
 	}
 	
 	private void start() throws InterruptedException {

@@ -9,7 +9,7 @@ import uk.ac.aston.jpd.coursework.officebuilding.building.PQueue;
 
 public class Floor {
 
-	private final int FLOORNO;
+	private final int FLOORsNO;
 	private PQueue waiting;
 	private List<Integer> onFloor;
 	private Button button;

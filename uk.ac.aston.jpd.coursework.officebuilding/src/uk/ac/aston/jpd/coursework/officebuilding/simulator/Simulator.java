@@ -30,11 +30,12 @@ public class Simulator {
 	 * Constructor that creates a simulator
 	 * @param elevator The elevator within the building
 	 */
-	public Simulator(int empNo, int devNo) {
+	public Simulator(int empNo, int devNo, int seed) {
 		this.EMPNO = empNo;
 		this.DEVNO = devNo;
 		this.building = new Building(generateElevator());
-		this.peopleHandle = new PersonHandler();
+		
+		this.peopleHandle = new PersonHandler(empNo, devNo, seed);
 		
 		// other stuff to do with people etc
 	}

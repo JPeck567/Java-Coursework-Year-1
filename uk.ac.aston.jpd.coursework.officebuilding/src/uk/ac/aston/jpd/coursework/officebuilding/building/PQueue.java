@@ -21,7 +21,7 @@ public class PQueue {
 	
 	public PQueue(int size) {
 		this.SIZE = size;
-		queue = new ArrayList<Integer>();
+		queue = new ArrayList<Integer>(size);
 	}
 	
 	public ArrayList<Integer> removePeople(int floor, Simulator sim) { // returns people who want to get off at floor id and removes from queue
@@ -33,7 +33,6 @@ public class PQueue {
 			if(sim.getPerson(pID).getDestination() == floor) {
 				offload.add(queue.remove(i)); // remove from queue, and add to list to return
 			}
-			
 		}
 		return offload;
 	}

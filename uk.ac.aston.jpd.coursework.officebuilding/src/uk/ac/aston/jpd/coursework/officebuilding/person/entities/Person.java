@@ -1,41 +1,35 @@
 package uk.ac.aston.jpd.coursework.officebuilding.person.entities;
 
 public class Person {
- protected int ID;
- protected int currentFloor;
- protected int weight;
- protected int destination;
+	protected final int ID;
+	protected final int WEIGHT;
+	protected int currentFloor;
+	protected int destination;
 
- public Person(int weight) {
-  this.weight = weight;
- }
- 
- protected int getCurrentFloor() {
-  return currentFloor;
- }
+	public Person(int weight, int id) {
+		ID = id;
+		WEIGHT = weight;
+		currentFloor = 0;
+		destination = 0;
+	}
+	
+	public int getWeight() {
+		return WEIGHT;
+	}
 
- public int getDestination() {
-  return destination;
-  // TODO Auto-generated method stub
- }
- 
- protected setDestnation(int floorNo) {
-  this.destination = floorNo;
- }
- 
- public int time() {
-  
- }
- 
- public void waitForElevator(int dest) {
-  
- }
- 
- public void exitElevator(int floorNo) {
-  this.destination = floorNo;
- }
- 
- public int getWeight() {
-  return weight;
- }
+	public int getCurrentFloor() {
+		return currentFloor;
+	}
+
+	public int getDestination() {
+		return destination;
+	}
+
+	public void setCurrentFloor(int floorNo) {
+		currentFloor = floorNo;
+	}
+	
+	public void setDestination(int floorNo) {
+		destination = floorNo;
+	}
 }

@@ -19,7 +19,8 @@ public class Building {
 *
 *  declaring fields 
 * 
-*/	private Floor[] floors;
+*/	
+	private Floor[] floors;
 	private Elevator elevator;
 	
  /*
@@ -54,7 +55,7 @@ public class Building {
 		return floors[floorNumber];
 	}
 	
-	public void addRequests(int floorNo, ArrayList<Integer> requestList) {
-		elevator.addRequests(floorNo, requestList);
+	public void addRequest(int floorNo) {
+		elevator.addRequest(floorNo);
 	}
 }

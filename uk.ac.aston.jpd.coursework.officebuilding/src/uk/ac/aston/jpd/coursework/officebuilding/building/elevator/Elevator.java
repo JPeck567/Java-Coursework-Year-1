@@ -38,15 +38,16 @@ public class Elevator {
 	public void tick(Simulator sim, Building bld) { // each tick, elevator is on a floor
 		if(currentFloor == destination) { // operations related to when elevator is at the floor it needs to be at
 			
-			if(direction == 'I') {  // can be at dest but because lift is idle, will not open etc
-				// TODO: function to check for req's
-				// if is req, set destination + direction
+			if(direction == 'I') {  // can be at dest but because lift is idle, will not need to open etc
+				if(requestsList.get(currentFloor)) {
+					// if is req, set destination + direction
+				}
 			} else {  // at dest and needs to offload/onload
 				openCloseMechanism(sim);
 			}
 			 			
 		} else { // if not at dest, moves toward dest only in the case the currfloor has no one to pick up
-			if(requestsList.get(currentFloor)) {
+			if(requestsList.get(currentFloor)) {  // before moving check floor if anyone wants to get on
 				openCloseMechanism(sim);
 			} else {
 				moveFloor();
@@ -56,26 +57,30 @@ public class Elevator {
 	}
 	
 	private void openCloseMechanism(Simulator sim) {
-		if(state.equals("ready")) { // stops movement and implies door is open
+		if(state.equals("close")) { // stops movement and opens door
 			isMovement = false;
 			state = "open";
 			System.out.println("Stopped at floor" + currentFloor);
 		
-		} else if(state.equals("open")) { // doors are open, so flow starts of people going out and possibly in
+		} else if(state.equals("open")) { // flow starts of people going out and possibly in. 'ready' state ensures next tick will close door
 			offloadPeople(sim); // people in queue needing to go out will do.
 			// TODO: people to get in will do by a floor give function, if enough room
-			// set req map to false is needed
 			// people currFloor will = -1 (meaning on elevator)
-			state = "close";
+			
+			requestsList.put(currentFloor, false);
+			
+			state = "ready";
 			System.out.println("Opening door");
 		    
-		} else if(state.equals("close")) { // door is to close and next dest is found
+		} else if(state.equals("ready")) { // closes door, finds new nearest dest and goes to it
 			isMovement = true;
-			state = "ready";
+			state = "close";
 			System.out.println("Closing door");
 			
+			searchNewDestination();
 			// TODO: find new destination, by checking request list for currentfloor+n if going up, or currentFloor-n if going down
 			//		 if no people want to use lift, goto ground and set direction to 'I' for idle
+			
 			setDirection(); // then sets direction based on new dest
 		}
 	}
@@ -96,11 +101,16 @@ public class Elevator {
 			direction = 'D';
 		}	
 	}
+	
+	private int searchNewDestination() {  // return 
+		return int;
+		
+	}
 		
 	private void offloadPeople(Simulator sim) {  // offloads people from lift if needed
 		ArrayList<Integer> offloaded = queue.removePeople(currentFloor, sim);  // gets people who need to get to current floor + removes from lift queue
 		if(!offloaded.isEmpty()) { // given there are people to get off
-			// TODO: set their person object state/current location (sim - peopleHandle)
+			// TODO: SIMULATOR: set their person object state/current location (sim - peopleHandle)
 			// TODO: then put to list on the floor
 		}
 	}
@@ -123,7 +133,7 @@ public class Elevator {
 		return reqList;
 	}
 	
-	public void addRequests(int floorNo) { // notifies lift the button is pressed at the floor given
+	public void addRequest(int floorNo) { // notifies lift the button is pressed at the floor given
 		requestsList.put(floorNo, true);
 	}
 	
