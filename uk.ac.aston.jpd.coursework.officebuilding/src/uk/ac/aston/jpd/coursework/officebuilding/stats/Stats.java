@@ -1,9 +1,10 @@
 package uk.ac.aston.jpd.coursework.officebuilding.stats;
 
 public class Stats {
-	// notes on:
-	public Stats (){
+	
+	public Stats () {
 	}
+	// notes on:
 	//   finding probablility --
 	// 		is code to do so
 	// 			rnd is java.util.Random object
@@ -11,7 +12,7 @@ public class Stats {
 	//			if num is < than the probability set, event happening will be true.
 	
 	// 	the seed var
-	//		pass the seed (a number you want) into random constructor
+	//		pass the seed (a number you want) into the random constructor
 	// 		the seed will specify what random numbers to generate
-	//		so effectively it will simulate the same building when a particular seed is given
+	//		so effectively it will simulate the same building randomness when a particular seed is given
 }

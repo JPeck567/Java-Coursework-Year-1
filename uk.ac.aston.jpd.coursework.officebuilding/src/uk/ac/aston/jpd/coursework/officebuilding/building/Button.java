@@ -18,15 +18,17 @@ public class Button {
 		pressedList.add(pID);
 	}
 	
-	public ArrayList<Integer> getPressed() {  // puts pressed to waiting
+	public ArrayList<Integer> getPressed() {  // returns pressed list and clears it
 		ArrayList<Integer> copy = pressedList;
 		pressedList.clear();
 		return copy;
 	}
+	
+	public boolean isPressed() {
+		return !pressedList.isEmpty();
+	}
 
 	public void tick(Floor floor) {
-		if(!pressedList.isEmpty()) {
-			floor.addRequests(getPressed());
-		}
+		floor.addRequests(getPressed());
 	}
 }

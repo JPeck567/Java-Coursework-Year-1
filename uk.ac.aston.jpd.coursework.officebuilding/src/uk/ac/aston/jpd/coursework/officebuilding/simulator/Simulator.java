@@ -43,7 +43,7 @@ public class Simulator {
 	public void run() throws InterruptedException { // called by launcher
 		while(tick <= SIMTIME) {
 			tick();
-			Thread.sleep(1000); // 1000ms = 1 second. Therefore in real life, each tick execution is ~ 1 second
+			Thread.sleep(1000); // 1000ms = 1 second. Therefore in real life, each tick execution is ~ 1 second ( 1s + code execution time between loops)
 		}
 	}
 
@@ -73,6 +73,11 @@ public class Simulator {
 	
 	public Person getPerson(int pID) {
 		return peopleHandle.getPerson(pID);
+	}
+
+	public void passNewCurrentFloor(ArrayList<Integer> offloaded, int floorNo) {
+		// TODO Auto-generated method stub
+		
 	}	
 	
 }

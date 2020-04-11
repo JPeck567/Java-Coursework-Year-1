@@ -37,8 +37,8 @@ public class PQueue {
 		return offload;
 	}
 	
-	public void addPeople(ArrayList<Integer> people) {
-		for(int pID: people) {
+	public void addPeople(ArrayList<Integer> pressed) {
+		for(int pID: pressed) {
 			queue.add(pID);
 		}
 	}

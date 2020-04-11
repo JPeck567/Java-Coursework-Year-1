@@ -1,9 +1,11 @@
 package uk.ac.aston.jpd.coursework.officebuilding.building.elevator;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import uk.ac.aston.jpd.coursework.officebuilding.building.Building;
 import uk.ac.aston.jpd.coursework.officebuilding.building.PQueue;
@@ -27,7 +29,7 @@ public class Elevator {
 		direction = 'I'; // meaning idle and not moving anywhere
 		destination = 0;  // initially at ground floor
 		currentFloor = 0;
-		state = "ready"; // either ready, meaning already off/onloaded and ready to go, or open, where off/onloading is in process. way of knowing if door needs to be closed or opened
+		state = "close"; // initially closed. will change to open then ready then close.
 		isMovement = true; // true = moving, false = idle
 		
 		this.queue = queue;
@@ -40,56 +42,57 @@ public class Elevator {
 			
 			if(direction == 'I') {  // can be at dest but because lift is idle, will not need to open etc
 				if(requestsList.get(currentFloor)) {
-					// if is req, set destination + direction
+					searchDestination();
+					setDirection();
 				}
 			} else {  // at dest and needs to offload/onload
-				openCloseMechanism(sim);
+				openCloseMechanism(sim, bld.getFloor(currentFloor));
 			}
 			 			
-		} else { // if not at dest, moves toward dest only in the case the currfloor has no one to pick up
-			if(requestsList.get(currentFloor)) {  // before moving check floor if anyone wants to get on
-				openCloseMechanism(sim);
-			} else {
+		} else { // if not at dest, then still moving to destination
+			if(requestsList.get(currentFloor) || isMovement) {  // before moving, checks current floor if anyone wants to get on, OR checks if in the process of such via checking if it has stopped
+				openCloseMechanism(sim, bld.getFloor(currentFloor));
+			} else {  // will move after opening and closing
 				moveFloor();
 				System.out.println("Moving to floor " + currentFloor);
 			}
 		}
 	}
 	
-	private void openCloseMechanism(Simulator sim) {
+	private void openCloseMechanism(Simulator sim, Floor currentFloorObj) {
 		if(state.equals("close")) { // stops movement and opens door
+			System.out.println("Stopped at floor" + currentFloor);
+			
 			isMovement = false;
 			state = "open";
-			System.out.println("Stopped at floor" + currentFloor);
-		
+			
 		} else if(state.equals("open")) { // flow starts of people going out and possibly in. 'ready' state ensures next tick will close door
-			offloadPeople(sim); // people in queue needing to go out will do.
-			// TODO: people to get in will do by a floor give function, if enough room
-			// people currFloor will = -1 (meaning on elevator)
-			
-			requestsList.put(currentFloor, false);
-			
-			state = "ready";
 			System.out.println("Opening door");
-		    
+			
+			offloadPeople(sim, currentFloorObj); // people in queue needing to go out will do.
+			onloadPeople(sim, currentFloorObj);
+			state = "ready";
+			  
 		} else if(state.equals("ready")) { // closes door, finds new nearest dest and goes to it
-			isMovement = true;
-			state = "close";
 			System.out.println("Closing door");
 			
-			searchNewDestination();
-			// TODO: find new destination, by checking request list for currentfloor+n if going up, or currentFloor-n if going down
-			//		 if no people want to use lift, goto ground and set direction to 'I' for idle
+			isMovement = true;
 			
+			destination = searchDestination();
 			setDirection(); // then sets direction based on new dest
+			state = "close";
 		}
-	}
+}
 		
 	private void moveFloor () {  // will go up/down to destination floor
-		if(direction == 'U') {
-			currentFloor += 1;
-		} else {
-			currentFloor -= 1;
+		switch(direction) {
+			case('U'):  // going up
+				currentFloor += 1;
+				break;
+			case('D'):  // going down
+				currentFloor -= 1;
+				break;
+			default:  // when idle, do not move
 		}
 	}
 	
@@ -101,27 +104,51 @@ public class Elevator {
 			direction = 'D';
 		}	
 	}
-	
-	private int searchNewDestination() {  // return 
-		return int;
+
+	private int searchDestination() {  // returns next closest request in direction of lift. If none, dest is furthest floor in lifts direction
+		Set<Integer> floorNums = requestsList.keySet();
 		
+		if(direction == 'D') {  // when going down + stops at dest, checks for any more reqs below currentFloor,
+			for(int floorNo = currentFloor - 1; floorNo == 0; floorNo--) { // searches from top to bottom, so finds closest req from currFloor (going down)
+				if(requestsList.get(floorNo)) {
+					return floorNo;  // if req at floor, return.
+				}
+			}
+		} else {  // is going up or is idle
+			for(int floorNo = currentFloor + 1; floorNo == 6; floorNo++) { // searches from bottom to top, so finds closest req from currFloor (going up)
+				if(requestsList.get(floorNo)) {
+					return floorNo;  // if req at floor, return.
+				}
+			}
+		}
+		direction = 'I';  // is no requests so assume idle state - allows for floor checking when moving
+		return 0; // is no requests so go to bottom
 	}
-		
-	private void offloadPeople(Simulator sim) {  // offloads people from lift if needed
+
+	private void offloadPeople(Simulator sim, Floor currentFloorObj) {  // offloads people from lift if needed
 		ArrayList<Integer> offloaded = queue.removePeople(currentFloor, sim);  // gets people who need to get to current floor + removes from lift queue
-		if(!offloaded.isEmpty()) { // given there are people to get off
-			// TODO: SIMULATOR: set their person object state/current location (sim - peopleHandle)
-			// TODO: then put to list on the floor
+		if(!offloaded.isEmpty()) { // given there are people in the offload list to get off
+			currentFloorObj.addToFloor(offloaded);
+			sim.passNewCurrentFloor(offloaded, currentFloor);  
 		}
 	}
 	
-	private void onloadPeople(Simulator sim, Building bld, int capacityAllowance) {
-		if(requestsList.get(currentFloor) && queue.getSpaces() > 0) {  // checks if people want to get on and if there is space to do so
-			Floor fl = bld.getFloor(currentFloor);
+	private void onloadPeople(Simulator sim, Floor currentFloorObj) {  // operations to onload people on currentfloor if there are people are waiting
+		if(requestsList.get(currentFloor)) {  // checks if people want to get on
+			int spaces = queue.getSpaces();
 			
-			// TODO: floor function to get remove ids from waiting, with specified amount.
-			// add req's id to this queue
-			// sets people to travelling state (sim - peopleHandle)
+			if(spaces > 0) {  // will only perform the onload operation if there is space on the elevator
+				ArrayList<Integer> people = currentFloorObj.getPeople(spaces);
+				
+				requestsList.put(currentFloor, false); 
+				queue.addPeople(people);
+				
+				sim.passNewCurrentFloor(people, -1); // sets people to travelling state meaning people currFloor will = -1 (meaning on elevator)
+			}
+			
+			if(!currentFloorObj.isWaiting()) { // checks if still people on waiting to get on, due to lift being full and people cannot get on
+				currentFloorObj.reRequest();
+			}
 		}
 	}
 	
