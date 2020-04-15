@@ -29,6 +29,10 @@ public class Button {
 	}
 
 	public void tick(Floor floor) {
-		floor.addRequests(getPressed());
+		for(int pID: pressedList) {
+			floor.addRequest(pID);
+		}
+		pressedList.clear();
+		
 	}
 }

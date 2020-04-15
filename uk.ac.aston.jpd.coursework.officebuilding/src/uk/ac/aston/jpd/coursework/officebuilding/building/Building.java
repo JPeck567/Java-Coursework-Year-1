@@ -1,4 +1,5 @@
 package uk.ac.aston.jpd.coursework.officebuilding.building;
+
 /*
 *  The building class indicated what the building core contents
 *  is currently the elevator
@@ -15,46 +16,46 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Building {
-/*
-*
-*  declaring fields 
-* 
-*/	
+	/*
+	 *
+	 * declaring fields
+	 * 
+	 */
 	private Floor[] floors;
 	private Elevator elevator;
-	
- /*
- *
- * Class constructor constructing the elevator.
- */
-	public Building (Elevator e){
+
+	/*
+	 *
+	 * Class constructor constructing the elevator.
+	 */
+	public Building(Elevator e) {
 		this.elevator = e;
 		floors = new Floor[Simulator.FLOORNO];
 		generateFloors();
 	}
-	
-	public void tick(Simulator sim){
-		for (Floor f : floors){
+
+	public void tick(Simulator sim) {
+		for (Floor f : floors) {
 			f.tick(this, elevator);
 		}
-		
-		elevator.tick(sim, this);	
+		elevator.tick(sim, this);
 	}
-	
-	private void generateFloors(){
-		for(int i = 0; i < Simulator.FLOORNO; i++){
-			floors[i] = new Floor(i, new PQueue(100), new Button(i)); // the size of each floor are arbitrary, as long as large enough for every person.
+
+	private void generateFloors() {
+		for (int i = 0; i < Simulator.FLOORNO; i++) {
+			floors[i] = new Floor(i, new PQueue(100), new Button(i)); // the size of each floor are arbitrary, as long
+																		// as large enough for every person.
 		}
 	}
-	
-	public int getNumberOfFloor(){
+
+	public int getNumberOfFloor() {
 		return floors.length;
 	}
-	
+
 	public Floor getFloor(int floorNumber) {
 		return floors[floorNumber];
 	}
-	
+
 	public void addRequest(int floorNo) {
 		elevator.addRequest(floorNo);
 	}

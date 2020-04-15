@@ -1,16 +1,18 @@
 package uk.ac.aston.jpd.coursework.officebuilding.person.entities;
 
+import uk.ac.aston.jpd.coursework.officebuilding.simulator.Simulator;
+
 public class Person {
 	protected final int ID;
 	protected final int WEIGHT;
 	protected int currentFloor;
 	protected int destination;
 
-	public Person(int weight, int id) {
+	public Person(int weight, int id, int destination) {
 		ID = id;
 		WEIGHT = weight;
-		currentFloor = 0;
-		destination = 0;
+		currentFloor = Simulator.DEFAULTFLOOR;
+		this.destination = destination;
 	}
 	
 	public int getWeight() {
@@ -31,5 +33,9 @@ public class Person {
 	
 	public void setDestination(int floorNo) {
 		destination = floorNo;
+	}
+	
+	public void pressButton(Simulator sim) {
+		sim.getButton(currentFloor).pressButton(ID);
 	}
 }

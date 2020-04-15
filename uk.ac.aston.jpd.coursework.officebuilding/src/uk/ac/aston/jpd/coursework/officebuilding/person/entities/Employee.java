@@ -1,7 +1,10 @@
 package uk.ac.aston.jpd.coursework.officebuilding.person.entities;
 
-public class Employee extends person {
- public Employee(int weight) {
-  
- }
+import uk.ac.aston.jpd.coursework.officebuilding.person.handler.PersonHandler;
+
+public class Employee extends Person {
+	
+	public Employee(int id, int destination) {
+		super(PersonHandler.DEFAULTWEIGHT, id, destination);
+	}
 }
