@@ -45,21 +45,19 @@ public class Elevator {
 			Floor currentFloorObj = bld.getFloor(currentFloor);
 
 			if (direction == 'I') {
-				if (!isMovement) {
+				if (!isMovement || checkStop(sim, currentFloorObj)) {  // either continue the open/close cycle or start it, if needed.
 					openCloseMechanism(sim, currentFloorObj);
-				} else if (checkStop(sim, currentFloorObj)) {
-					openCloseMechanism(sim, currentFloorObj);
-				} else {
-					updateDestination(sim, currentFloorObj); // find newest highest or lowest dest each tick if new people move onto lift or req for a floor in building
-					setDirection(); // based upon if update has found new dest or not
+				} else {  // if not needed to onload/offload on current floor
+					updateDestination(sim, currentFloorObj); // finds new dest for lift
+					setDirection(); // sets direction based upon if update above has found new dest or not
+					
 					if(checkStop(sim, currentFloorObj)) {  // if new req, will either open if on same floor or move to it
 						openCloseMechanism(sim, currentFloorObj);
 					} else {
 						moveFloor();
 					}
 				}
-
-			} else { // open/close process
+			} else { // open/close process as on dest floor and not idle.
 				openCloseMechanism(sim, currentFloorObj);
 			}
 		} else { // no one needs to get on
@@ -107,16 +105,12 @@ public class Elevator {
 			currentFloor -= 1;
 			break;
 		default:
-			// TODO exception thing here
+			// TODO exception
 		}
 	}
 
 	private void changeDirection() {
-		if (direction == ('U')) {
-			direction = ('D');
-		} else {
-			direction = ('U');
-		}
+		direction = (direction == 'U') ? 'D': 'U';
 	}
 
 	private void setDirection() {
@@ -131,9 +125,7 @@ public class Elevator {
 	}
 
 	private boolean checkStop(Simulator sim, Floor currentFloorObj) {  // checks if lift is needed to stop at its currentFloor.
-		if (!queue.getOffload(sim, currentFloor).isEmpty()) {
-			return true;
-		} else if (requestsList.get(currentFloor)) {
+		if (!queue.getOffload(sim, currentFloor).isEmpty() || requestsList.get(currentFloor)) {
 			return true;
 		} else {
 			return false;

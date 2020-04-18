@@ -48,7 +48,7 @@ public class Simulator {
 			System.out.println("tick: " + tick);
 
 			tick();
-			Thread.sleep(125); // 1000ms = 1 second. Therefore in real life, each tick execution is ~ 1 second
+			Thread.sleep(1000); // 1000ms = 1 second. Therefore in real life, each tick execution is ~ 1 second
 								// ( 1s + code execution time between loops)
 		}
 	}
