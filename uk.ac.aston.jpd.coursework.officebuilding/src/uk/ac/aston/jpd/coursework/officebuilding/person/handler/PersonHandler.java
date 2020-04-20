@@ -25,6 +25,7 @@ public class PersonHandler {
 	}
 
 	public void tick(Simulator sim) {
+		// TODO people to leave building code
 		stat.tick(this, sim);
 	}
 
