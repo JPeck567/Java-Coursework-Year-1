@@ -7,8 +7,10 @@ public class DecisionSimulator {
 		this.PROBP = p;
 	}
 	
-	public boolean getProb() {
-		// TODO Auto-generated method stub
+	public boolean getProb(double randNum) {
+		if(PROBP > randNum) {
+			return true;
+		}
 		return false;
 	}
 	

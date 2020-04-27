@@ -13,6 +13,7 @@ import uk.ac.aston.jpd.coursework.officebuilding.building.floor.Floor;
 import uk.ac.aston.jpd.coursework.officebuilding.simulator.Simulator;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class Building {
@@ -28,10 +29,10 @@ public class Building {
 	 *
 	 * Class constructor constructing the elevator.
 	 */
-	public Building(Elevator e) {
+	public Building(Elevator e, int noFloors) {
 		this.elevator = e;
-		floors = new Floor[Simulator.FLOORNO];
-		generateFloors();
+		floors = new Floor[noFloors];
+		generateFloors(noFloors);
 	}
 
 	public void tick(Simulator sim) {
@@ -41,10 +42,9 @@ public class Building {
 		elevator.tick(sim, this);
 	}
 
-	private void generateFloors() {
-		for (int i = 0; i < Simulator.FLOORNO; i++) {
-			floors[i] = new Floor(i, new PQueue(100), new Button(i)); // the size of each floor are arbitrary, as long
-																		// as large enough for every person.
+	private void generateFloors(int noFloors) {
+		for (int i = 0; i < noFloors; i++) {
+			floors[i] = new Floor(i, new Button(i));
 		}
 	}
 
@@ -58,5 +58,17 @@ public class Building {
 
 	public void addRequest(int floorNo) {
 		elevator.addRequest(floorNo);
+	}
+
+	public List<Integer> getElevatorQueue() {
+		return elevator.getQueue();
+	}
+
+	public int getElevatorCurrentFloor() {
+		return elevator.getCurrentFloor();
+	}
+
+	public String getElevatorState() {
+		return elevator.getState();
 	}
 }

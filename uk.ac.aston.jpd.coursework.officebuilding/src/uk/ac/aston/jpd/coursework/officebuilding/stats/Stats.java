@@ -14,46 +14,40 @@ public class Stats {
 	private int seed;
 	private ArrivalSimulator arrSim;
 	private DecisionSimulator decSim;
-	
-	public Stats (int seed, double p) {
+
+	public Stats(int seed, double p, double q) {
+		//make random object
+		rnd = new Random(seed);
+
 		//seed field.
 		this.seed = seed;
-		
-		//make random object
-		rnd = new Random (seed);
-		
+
 		//the two stats classes
-		arrSim = new ArrivalSimulator(p);
-		decSim = new DecisionSimulator ();
-		
+		decSim = new DecisionSimulator(p);
+		arrSim = new ArrivalSimulator(q);
 	}
-	// notes on:
-	//   finding probablility --
-	// 		is code to do so
-	public boolean getProb (Person p) {
-		// if p is client or maintenance
-		if(p instanceof Client) {
-			return arrSim.getProbCli(rnd.nextDouble());
-		} else if(p instanceof Maintenance) {
-			return arrSim.getProbMain();
-		} else { //  if (p instanceof Developer || p instanceof Employee)
-			return decSim.getProb();
-		}
-		
-		//double num = rnd.nextDouble(); // random number from 0.0 to 0.1
-	}
-	
-	// 	the seed var
-	//		pass the seed (a number you want) into the random constructor
-	// 		the seed will specify what random numbers to generate
-	//		so effectively it will simulate the same building randomness when a particular seed is given
-	
+
 	public void tick(PersonHandler pHandle, Simulator sim) {
-		// TODO Auto-generated method stub
+
 	}
-	
-	public int getRandomFloor() {
-		// TODO
-		return 4;
+
+	public boolean getDecisionProb() {
+		return decSim.getProb(rnd.nextDouble());
+	}
+
+	public boolean getMArrivalProb() {
+		return arrSim.getProbMain(rnd.nextDouble());
+	}
+
+	public boolean getCArrivalProb() {
+		return arrSim.getProbCli(rnd.nextDouble());
+	}
+
+	public int getRandomFloor(int noFloors) { // 0 to noFloors(exclusive). this is fine as we count floor 0 as a floor
+		return rnd.nextInt(noFloors);
+	}
+
+	public int getRandomRangeNum(int boundL, int boundR) { // generates rand num from 0 to boundR.
+		return rnd.nextInt(boundR - boundL) + boundL; // rand num between 0 and range(diff of l to r) and then + boundL, therefore moving range of nums into correct range given in parameters
 	}
 }

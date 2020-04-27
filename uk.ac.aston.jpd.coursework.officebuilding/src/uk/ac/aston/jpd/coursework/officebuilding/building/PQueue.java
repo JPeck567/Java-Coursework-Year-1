@@ -51,16 +51,18 @@ public class PQueue {
 		return queue.stream().filter(i -> sim.getPerson(i).getDestination() == floorNo).collect(Collectors.toList());
 	}
 	
-	public Optional<Integer> getHighestFloor(Simulator sim) {
+	public Optional<Integer> getNextUpFloor(Simulator sim, int currentFloor) {
 		return queue.stream()
 				.map(pID -> sim.getPerson(pID).getDestination())
-				.max(Integer::compare);
+				.filter(floor -> floor > currentFloor)
+				.min(Integer::compare);
 	}
 	
-	public Optional<Integer> getLowestFloor(Simulator sim) {
+	public Optional<Integer> getNextDownFloor(Simulator sim, int currentFloor) {
 		return queue.stream()
-				.map(pID -> sim.getPerson(pID).getDestination())
-				.max(Integer::compare);
+				.map(pID -> sim.getPerson(pID).getDestination())  // turns list of pids to list of their desinations
+				.filter(floor -> floor < currentFloor)  // gets dests which are below current floor, as we are going down
+				.max(Integer::compare);  // gets highest floor below elevator, using method reference
 	}
 	
 	public int getSpaces() {

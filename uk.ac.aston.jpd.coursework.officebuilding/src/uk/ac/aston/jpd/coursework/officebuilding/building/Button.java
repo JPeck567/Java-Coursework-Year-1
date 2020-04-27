@@ -18,10 +18,10 @@ public class Button {
 		pressedList.add(pID);
 	}
 	
-	public ArrayList<Integer> getPressed() {  // returns pressed list and clears it
-		ArrayList<Integer> copy = pressedList;
+	public List<Integer> getPressed() {  // returns pressed list and clears it
+		List<Integer> pressedCopy = new ArrayList<Integer>(pressedList);
 		pressedList.clear();
-		return copy;
+		return pressedCopy;
 	}
 	
 	public boolean isPressed() {

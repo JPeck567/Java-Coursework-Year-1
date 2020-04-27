@@ -1,24 +1,31 @@
 package uk.ac.aston.jpd.coursework.officebuilding;
 
+import java.util.Random;
+
+import uk.ac.aston.jpd.coursework.officebuilding.interfacer.Interfacer;
 import uk.ac.aston.jpd.coursework.officebuilding.simulator.Simulator;
 
 public class Launcher {
 	
 	private Simulator sim;
+	private Interfacer interfacer;
 	
 	public Launcher() {
-		sim = new Simulator(10, 10, 0);  // empNo, devNo and the seed
+		interfacer = new Interfacer();
 	}
 	
-	private void start() throws InterruptedException {
-		sim.run();
+	private void launch() throws InterruptedException {
+		sim.run(interfacer);
+	}
+	
+	private void build() {
+		interfacer.readVariables();
+		sim = new Simulator(7, 4, interfacer.getEmpNo(), interfacer.getDevNo(), interfacer.getSeed(), interfacer.getP(), interfacer.getQ());
 	}
 	
 	public static void main(String args[]) throws InterruptedException {
-		Launcher launch = new Launcher();
-		// where the whole programmes objects are all initialised
-	
-		launch.start();
-		// where the simulator is ran
+		Launcher l = new Launcher();
+		l.build();
+		l.launch();
 	}
 }
