@@ -34,6 +34,7 @@ public class Simulator {
 
 	/**
 	 * Constructor that creates a simulator
+	 * @param this 
 	 * 
 	 * @param elevator The elevator within the building
 	 */
@@ -42,7 +43,7 @@ public class Simulator {
 		this.maxCapacity = maxCapacity;
 		this.empNo = empNo;
 		this.devNo = devNo;
-		this.building = new Building(generateElevator(), noFloors);
+		this.building = new Building(generateElevator(), noFloors, this);
 		this.peopleHandler = new PersonHandler(empNo, devNo, seed, this, p, q);
 		this.interfacer = new Interfacer();
 	}
@@ -50,7 +51,7 @@ public class Simulator {
 	public void run(Interfacer interfacer) throws InterruptedException { // called by launcher
 		while (tick < SIMTIME) {
 			tick();
-			Thread.sleep(1000); // 1000ms = 1 second. Therefore in real life, each tick execution is ~ 1 second
+			//Thread.sleep(1000); // 1000ms = 1 second. Therefore in real life, each tick execution is ~ 1 second
 								// ( 1s + code execution time between loops)
 			interfacer.printSimulation(getTick(), getFloors(), getElevatorQueue(), getElevatorState(), getElevatorCurrentFloor());;
 		}
@@ -73,10 +74,6 @@ public class Simulator {
 		return new Elevator(new PQueue(maxCapacity), noFloors);
 	}
 
-	public Button getButton(int floorNo) {
-		return building.getFloor(floorNo).button;
-	}
-
 	public Person getPerson(int pID) {
 		return peopleHandler.getPerson(pID);
 	}
@@ -88,21 +85,9 @@ public class Simulator {
 	public void addToOnFloor(int pID, int floorNo) {
 		building.getFloor(floorNo).addToFloor(pID);
 	}
-
-	public void passNewCurrentFloor(int pID, int floorNo) {
-		peopleHandler.setCurrentFloor(pID, floorNo);
-	}
 	
 	public int getNoFloors() {
 		return noFloors;
-	}
-
-	public int getDevNo() {
-		return devNo;
-	}
-	
-	public int getEmpNo() {
-		return empNo;
 	}
 
 	public Floor getFloor(int currentFloor) {
@@ -123,13 +108,12 @@ public class Simulator {
 
 	public void removeFromFloor(int currentFloor, int pID) {
 		building.getFloor(currentFloor).removeFromOnFloor(pID);
-		
+	}
+	
+	public void removeFromWaiting(int currentFloor, int pID) {
+		building.getFloor(currentFloor).removeFromWaiting(pID);
 	}
 
-	public void removePerson(int pID) {
-		peopleHandler.removePerson(pID);
-		
-	}
 
 	public int getElevatorCurrentFloor() {
 		return building.getElevatorCurrentFloor();
@@ -138,7 +122,4 @@ public class Simulator {
 	public String getElevatorState() {
 		return building.getElevatorState();
 	}
-	
-	
-
 }

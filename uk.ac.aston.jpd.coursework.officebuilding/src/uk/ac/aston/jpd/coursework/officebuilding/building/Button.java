@@ -27,12 +27,4 @@ public class Button {
 	public boolean isPressed() {
 		return !pressedList.isEmpty();
 	}
-
-	public void tick(Floor floor) {
-		for(int pID: pressedList) {
-			floor.addRequest(pID);
-		}
-		pressedList.clear();
-		
-	}
 }

@@ -4,24 +4,26 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
+import java.util.PriorityQueue;
 
 import uk.ac.aston.jpd.coursework.officebuilding.building.Building;
 import uk.ac.aston.jpd.coursework.officebuilding.building.Button;
 import uk.ac.aston.jpd.coursework.officebuilding.building.PQueue;
 import uk.ac.aston.jpd.coursework.officebuilding.building.elevator.Elevator;
+import uk.ac.aston.jpd.coursework.officebuilding.simulator.Simulator;
 
 public class Floor {
 
 	private final int FLOORNO;
 	private int toPress; // a toggle, in the case lift is full + people still waiting, will re press button and tell lift to stop when it next comes. button press occures after two ticks (one to close door, one after lift moves away), meaning values is at 3
-	private LinkedList<Integer> waitingQueue;
+	private Queue<Integer> waitingQueue;
 	private List<Integer> onFloor;
 	public Button button;
 
-	public Floor(int floorNo, Button button) {
+	public Floor(int floorNo, Button button, Simulator sim) {
 		FLOORNO = floorNo;
 		toPress = 0;
-		this.waitingQueue = new LinkedList<Integer>();
+		this.waitingQueue = new PriorityQueue<Integer>(new WaitingQueueComparator(sim));
 		onFloor = new ArrayList<Integer>();
 		this.button = button;
 	}
@@ -60,24 +62,24 @@ public class Floor {
 		onFloor.add(pID);
 	}
 
-	public void removeFromWaiting() {
-		waitingQueue.remove();  // finds index of id so we can remove it
+	public void removeFromWaiting(int pID) {
+		waitingQueue.remove(pID);  // finds index of id so we can remove it if they are a impatient client
 	}
 
 	public void pressButton(int pID) {
 		button.pressButton(pID);
 	}
 
-	public int getWaitingPerson() {
+	public int peekWaitingPerson() {
 		return waitingQueue.peek();
+	}
+	
+	public int pollWaitingPerson() {
+		return waitingQueue.poll();
 	}
 
 	public void reRequest() {
 		toPress = 1;
-	}
-
-	public int getNumberWaiting() {
-		return waitingQueue.size();
 	}
 
 	public boolean waitingIsEmpty() {

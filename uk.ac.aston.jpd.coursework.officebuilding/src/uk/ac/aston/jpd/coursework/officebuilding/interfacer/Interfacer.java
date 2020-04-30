@@ -19,8 +19,7 @@ public class Interfacer {
 		in = new Scanner(System.in);
 	}
 
-	public void printSimulation(int tick, Floor[] floors, List<Integer> elevatorQueue, String elevatorState,
-			int elevatorCurrentFloor) {
+	public void printSimulation(int tick, Floor[] floors, List<Integer> elevatorQueue, String elevatorState, int elevatorCurrentFloor) {
 		StringBuilder output = new StringBuilder();
 
 		int tickSecs = tick * 10;
@@ -40,7 +39,7 @@ public class Interfacer {
 					+ String.format("%-30s|", f.getWaitingQueue().toString());
 
 			if (elevatorCurrentFloor == floor) {
-				floorPrint += elevatorQueue;
+				floorPrint += elevatorQueue + " " + elevatorState.substring(0, 1).toUpperCase() + elevatorState.substring(1, elevatorState.length());
 			}
 
 			output.append(floorPrint + "\n");
@@ -50,27 +49,27 @@ public class Interfacer {
 	}
 
 	public void readVariables() {
-		System.out.println("Enter the number of Employees: \n");
+		System.out.print("Enter the number of Employees: ");
 		if (in.hasNext()) {
 			empNo = in.nextInt();
 		}
 		
-		System.out.println("Enter the number of Developers: \n");
+		System.out.print("Enter the number of Developers: ");
 		if (in.hasNext()) {
 			devNo = in.nextInt();
 		}
 
-		System.out.println("Enter the seed: \n");
+		System.out.print("Enter the seed: ");
 		if (in.hasNext()) {
 			seed = in.nextInt();
 		}
 
-		System.out.println("Enter the probability of p: \n");
+		System.out.print("Enter the probability of p: ");
 		if (in.hasNext()) {
 			p = in.nextDouble();
 		}
 
-		System.out.println("Enter the probability of q: \n");
+		System.out.print("Enter the probability of q: ");
 		if (in.hasNext()) {
 			q = in.nextDouble();
 		}

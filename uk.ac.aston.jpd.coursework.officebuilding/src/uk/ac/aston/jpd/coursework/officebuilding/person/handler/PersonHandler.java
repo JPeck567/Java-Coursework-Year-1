@@ -19,10 +19,10 @@ import uk.ac.aston.jpd.coursework.officebuilding.stats.Stats;
 
 public class PersonHandler {
 	private Map<Integer, Person> people;
-	//private Map<Integer, ArrivingPerson> arrivals;
 	private int idCounter;
 	public static final int DEFAULTWEIGHT = 1;
 	public static final int MAINTENANCEWEIGHT = 4;
+	public static final int DEFAULTSTARTINGTICK = 9999;
 
 	private Stats stat;
 
@@ -76,7 +76,7 @@ public class PersonHandler {
 
 		if (stat.getMArrivalProb()) {
 			int timeAvailable = (stat.getRandomRangeNum(20, 40) * 60) / 10; // number of ticks to stay in building. random amount of time from 20 to 40 mins 
-			Person p = new Maintenance(idCounter, noFloors - 1, timeAvailable, sim.getTick()); // maintenance goto top floor
+			Person p = new Maintenance(idCounter, noFloors - 1, timeAvailable); // maintenance goto top floor
 
 			addPerson(p);
 			pressButton(sim, p);
@@ -98,16 +98,26 @@ public class PersonHandler {
 
 	private void arrivalsTimeCheck(Simulator sim) {
 		List<Integer> toRemove = new ArrayList<Integer>();
+		int currentTick = sim.getTick();
 
 		for (Person p : people.values()) {
 			if (p instanceof ArrivingPerson) {
 				ArrivingPerson arrP = (ArrivingPerson) p;
-					
-				if (arrP.isTimeTaken(sim.getTick())) { // if time taken in building is up
+				
+				if(arrP.getStartingTick() == DEFAULTSTARTINGTICK) { // if arrival is not yet gotten to requested floor
+					if(arrP instanceof Client) {  // and is client
+						Client c = (Client) arrP;
+						if(c.isComplaining(currentTick) && c.isWaiting()) {  // if taken too long to wait for elevator, and not waiting (as will still check even if on elevator)
+							sim.removeFromWaiting(p.getCurrentFloor(), p.getID());
+							toRemove.add(arrP.getID());
+						}
+					}
+				} else if (arrP.isTimeTaken(currentTick)) { // arrival is at it's req floor and is taken the alloted amount of time to stay in the building
 					//System.out.println();
 					if (arrP.getToExit()) { // if on way to exit
-						if(p.getCurrentFloor() == 0) {  // and has gotten to ground
-							toRemove.add(p.getID());
+						if(arrP.getCurrentFloor() == 0) {  // and has gotten to ground
+							sim.removeFromFloor(p.getCurrentFloor(), p.getID());
+							toRemove.add(arrP.getID());
 						}
 					} else {  // not on way to exit, so we make them go on their way
 						pressButton(sim, p);
@@ -120,7 +130,6 @@ public class PersonHandler {
 		}
 
 		for (int pID : toRemove) {
-			sim.removeFromFloor(0, pID);
 			removePerson(pID);
 		}
 	}
@@ -148,10 +157,11 @@ public class PersonHandler {
 	}
 
 	private void pressButton(Simulator sim, Person p) {
-		if (p.getDestination() == 0 && p.getCurrentFloor() == 0) {
+		if (p.getDestination() == 0 && p.getCurrentFloor() == 0) {  // already at needed floor
 			sim.addToOnFloor(p.getID(), Simulator.DEFAULTFLOOR);
 			
 			if(p instanceof ArrivingPerson) {
+				// special case as usually would set starting tick in elevators offload method, but cannot if already at floor, and doesn't need the elevator
 				((ArrivingPerson) p).setStartingTick(sim.getTick());
 			}
 		} else {
@@ -159,10 +169,6 @@ public class PersonHandler {
 			p.setIsWaiting(true);
 			
 		}
-	}
-
-	public void setCurrentFloor(int pID, int floorNo) {
-		getPerson(pID).setCurrentFloor(floorNo);
 	}
 
 	public int getRandomDevFloor(int currentFloor, int noFloors) {

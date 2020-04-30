@@ -27,18 +27,6 @@ public class PQueue {
 		queue = new ArrayList<Integer>(size);
 	}
 	
-	/*
-	 * public ArrayList<Integer> removePeople(int floor, Simulator sim) { // returns
-	 * people who want to get off at floor id and removes from queue
-	 * ArrayList<Integer> offload = new ArrayList<Integer>();
-	 * 
-	 * for(int i = 0; i <= queue.size(); i++) { int pID = queue.get(i);
-	 * 
-	 * if(sim.getPerson(pID).getDestination() == floor) {
-	 * offload.add(queue.remove(i)); // remove from queue, and add to list to return
-	 * } } return offload; }
-	 */
-	
 	public int removePerson(int index) {
 		return queue.remove(index);
 	}
@@ -69,18 +57,6 @@ public class PQueue {
 		return SIZE - queue.size();
 	}
 		
-	public boolean isEmpty() {
-		return queue.isEmpty();
-	}
-	
-	public int getSize() {
-		return queue.size();
-	}
-	
-	public int getPerson(int index) {
-		return queue.get(index);
-	}
-	
 	public List<Integer> getQueue(){
 		return queue;
 	}
