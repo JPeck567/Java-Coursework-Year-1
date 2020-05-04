@@ -26,6 +26,7 @@ public class PersonHandler {
 	public static final int MAINTENANCEWEIGHT = 4;
 	public static final int DEFAULTSTARTINGTICK = 9999;
 	private final Stats stat;
+	private int noComplaints;
 
 	public PersonHandler(int empNo, int devNo, int seed, Simulator sim, double p, double q) {
 		people = new HashMap<Integer, Person>();
@@ -110,6 +111,7 @@ public class PersonHandler {
 						if(c.isComplaining(currentTick) && c.isWaiting()) {  // if taken too long to wait for elevator, and not waiting (as will still check even if on elevator)
 							sim.removeFromWaiting(p.getCurrentFloor(), p.getID());
 							toRemove.add(arrP.getID());
+							noComplaints++;
 						}
 					}
 				} else if (arrP.isTimeTaken(currentTick)) { // arrival is at it's req floor and is taken the alloted amount of time to stay in the building
@@ -196,5 +198,9 @@ public class PersonHandler {
 
 	public void removePerson(int pID) {
 		people.remove(pID);
+	}
+
+	public int getComplaints() {
+		return noComplaints;
 	}
 }

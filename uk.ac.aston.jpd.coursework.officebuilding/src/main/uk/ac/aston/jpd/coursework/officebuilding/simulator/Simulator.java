@@ -30,7 +30,7 @@ public class Simulator {
 	public final int noFloors; // are 7 floors. represented as 0 to 6 in the floor array of building
 	public final int maxCapacity;
 	public final static int DEFAULTFLOOR = 0;
-
+	
 	/**
 	 * Constructor that creates a simulator
 	 * @param this 
@@ -51,7 +51,7 @@ public class Simulator {
 								// ( 1s + code execution time between loops)
 			interfacer.printSimulation(this, getTick(), getFloors(), 
 					getElevatorQueue().stream().map(pID -> getPerson(pID).toString()).collect(Collectors.toList()), 
-					getElevatorState(), getElevatorCurrentFloor());
+					getElevatorState(), getElevatorCurrentFloor(), peopleHandler.getComplaints());
 		}
 	}
 

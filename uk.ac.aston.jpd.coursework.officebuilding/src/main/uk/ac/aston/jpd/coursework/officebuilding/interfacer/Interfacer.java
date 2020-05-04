@@ -21,14 +21,14 @@ public class Interfacer {
 		in = new Scanner(System.in);
 	}
 
-	public void printSimulation(Simulator sim, int tick, Floor[] floors, List<String> elevatorQueue, String elevatorState, int elevatorCurrentFloor) {
+	public void printSimulation(Simulator sim, int tick, Floor[] floors, List<String> elevatorQueue, String elevatorState, int elevatorCurrentFloor, int noComplaints) {
 		StringBuilder output = new StringBuilder();
 
 		int tickSecs = tick * 10;
 		String elevatorQueueStr = elevatorQueue.toString();
 
-		output.append(tickSecs + "\n");
-
+		output.append("Seconds: " + tickSecs + "\n");
+		output.append("Number of complaints: " + noComplaints + "\n"); 
 		if (elevatorState.equals("open")) {
 			elevatorQueueStr = elevatorQueueStr.substring(1, elevatorQueueStr.length());
 		}
