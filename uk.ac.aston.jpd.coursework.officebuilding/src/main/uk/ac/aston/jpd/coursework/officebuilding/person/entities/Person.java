@@ -83,4 +83,19 @@ public class Person {
 	public void setTimeStamp(long timeStamp) {
 		this.timeStamp = timeStamp;
 	}
+	
+	public double getAverageWaitingTime() {  // -1 is no times recorded
+		if(!waitTimeList.isEmpty()) {
+			double average = 0;
+			
+			for(int time : waitTimeList) {
+				average += time;
+			}
+			
+			return average / waitTimeList.size();
+		} else {
+			return -1;
+		}
+		
+	}
 }

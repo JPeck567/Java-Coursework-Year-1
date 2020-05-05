@@ -13,7 +13,6 @@ public class Launcher {
 	public Launcher() {
 		interfacer = new Interfacer();
 
-		interfacer.readVariables();
 		sim = createSimulator();
 	}
 

@@ -22,5 +22,8 @@ import uk.ac.aston.jpd.coursework.officebuilding.person.entities.Person;
 import uk.ac.aston.jpd.coursework.officebuilding.person.handler.PersonHandler;
 
 public class ElevatorTest {
+	public void offloadPeopleTest() {
+		
+	}
 	
 }

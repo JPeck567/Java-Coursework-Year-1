@@ -20,16 +20,18 @@ import uk.ac.aston.jpd.coursework.officebuilding.stats.Stats;
 
 public class PersonHandler {
 	private final Map<Integer, Person> people;
+	private final Map<Integer, Person> departedPeople;
+	private final Stats stat;
 	private int idCounter;
+	private int noComplaints;
 	public static final String[] COMPANIES = {"Goggles", "Mugtome"};
 	public static final int DEFAULTWEIGHT = 1;
 	public static final int MAINTENANCEWEIGHT = 4;
 	public static final int DEFAULTSTARTINGTICK = 9999;
-	private final Stats stat;
-	private int noComplaints;
-
+	
 	public PersonHandler(int empNo, int devNo, int seed, Simulator sim, double p, double q) {
 		people = new HashMap<Integer, Person>();
+		departedPeople = new HashMap<Integer, Person>();
 		idCounter = 0;
 		stat = new Stats(seed, p, q);
 		generatePeople(empNo, devNo, sim.getNoFloors());
@@ -129,8 +131,12 @@ public class PersonHandler {
 				}
 			}
 		}
-
+		removePeople(toRemove);
+	}
+	
+	private void removePeople(List<Integer> toRemove) {
 		for (int pID : toRemove) {
+			departedPeople.put(pID, getPerson(pID));
 			removePerson(pID);
 		}
 	}
@@ -202,5 +208,21 @@ public class PersonHandler {
 
 	public int getComplaints() {
 		return noComplaints;
+	}
+	
+	public HashMap<Integer, Double> getAvgWaitingTime(){
+		HashMap<Integer, Person> allPeople = new HashMap<Integer, Person>();
+		allPeople.putAll(people);
+		allPeople.putAll(departedPeople);
+		HashMap<Integer, Double> peopleAvgWaitTime = new HashMap<Integer, Double>();
+		
+		for (int pID : allPeople.keySet()) {
+			double avgWait = getPerson(pID).getAverageWaitingTime();
+			if(avgWait != -1) {  // if there is actual data to record
+				peopleAvgWaitTime.put(pID, avgWait);
+			}
+		}
+		
+		return peopleAvgWaitTime;
 	}
 }
