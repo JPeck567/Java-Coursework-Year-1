@@ -23,6 +23,9 @@ import uk.ac.aston.jpd.coursework.officebuilding.person.entities.Person;
  */
 public class Simulator {
 
+	/**
+	 *
+	 */
 	private int tick;
 	private static final int SIMTIME = 2880; // 8hrs = 2880 ticks (as each tick is 10s)
 	private final PersonHandler peopleHandler;
@@ -44,6 +47,9 @@ public class Simulator {
 		this.peopleHandler = new PersonHandler(empNo, devNo, seed, this, p, q);
 	}
 
+	/**
+	 *
+	 */
 	public void run(Interfacer interfacer) throws InterruptedException { // called by launcher
 		while (tick < SIMTIME) {
 			tick();
@@ -72,29 +78,50 @@ public class Simulator {
 		return new Elevator(new PQueue(maxCapacity), noFloors);
 	}
 
+	/**
+	 *
+	 */
 	public Person getPerson(int pID) {
 		return peopleHandler.getPerson(pID);
 	}
 	
+	/**
+	 *
+	 */
 	public int getTick() {
 		return tick;
 	}
 	
+	/**
+	 *
+	 */
 	public void addToOnFloor(int pID, int floorNo) {
 		building.getFloor(floorNo).addToFloor(pID);
 	}
 	
+	/**
+	 *
+	 */
 	public int getNoFloors() {
 		return noFloors;
 	}
 
+	/**
+	 *
+	 */
 	public Floor getFloor(int currentFloor) {
 		return building.getFloor(currentFloor);
 	}
 
+	/**
+	 *
+	 */
 	public List<Integer> getElevatorQueue() {
 		return building.getElevatorQueue();
 	}
+	/**
+	 *
+	 */
 
 	public Floor[] getFloors() {
 		Floor[] f = new Floor[noFloors];
@@ -104,22 +131,36 @@ public class Simulator {
 		return f;
 	}
 
+	/**
+	 *
+	 */
 	public void removeFromFloor(int currentFloor, int pID) {
 		building.getFloor(currentFloor).removeFromOnFloor(pID);
 	}
 	
+	/**
+	 *
+	 */
 	public void removeFromWaiting(int currentFloor, int pID) {
 		building.getFloor(currentFloor).removeFromWaiting(pID);
 	}
 
+	/**
+	 *
+	 */
 	public int getElevatorCurrentFloor() {
 		return building.getElevatorCurrentFloor();
 	}
 
+	/**
+	 *
+	 */
 	public String getElevatorState() {
 		return building.getElevatorState();
 	}
-	
+	/**
+	 *
+	 */
 	public static long getNewTimeStamp() {
 		return System.nanoTime();
 	}

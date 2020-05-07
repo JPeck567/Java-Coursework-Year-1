@@ -23,12 +23,18 @@ import uk.ac.aston.jpd.coursework.officebuilding.person.handler.PersonHandler;
 
 public class Elevator {
 
+	/**
+	 *
+	 */
 	private String state;
 	private final PQueue queue; // space to hold people to get in the elevator
 	private final Map<Integer, Boolean> requestsList; // to know where people are to get in lift
 	private char direction;
 	private int currentFloor;
 
+	/**
+	 *
+	 */
 	public Elevator(PQueue queue, int noFloors) {
 		direction = 'I'; // meaning idle and not moving anywhere
 		currentFloor = 0;
@@ -39,6 +45,9 @@ public class Elevator {
 
 	}
 
+	/**
+	 *
+	 */
 	public void tick(Simulator sim, Building bld) {
 		Floor currentFloorObj = bld.getFloor(currentFloor);
 
@@ -51,6 +60,9 @@ public class Elevator {
 		setDirection(updateDestination(sim, currentFloorObj));
 	}
 
+	/**
+	 *
+	 */
 	private void openCloseMechanism(Simulator sim, Floor currentFloorObj) {
 		if (state.equals("close")) { // stops movement and opens door
 			state = "open";
@@ -62,6 +74,9 @@ public class Elevator {
 		}
 	}
 
+	/**
+	 *
+	 */
 	private void moveFloor() { // will go up/down to destination floor
 		switch (direction) {
 		case ('U'): // going up
@@ -76,6 +91,9 @@ public class Elevator {
 		}
 	}
 
+	/**
+	 *
+	 */
 	private void setDirection(int destinationFloor) {
 		if (destinationFloor != -1) {
 			if (destinationFloor > currentFloor) { // lift needs to go up
@@ -88,6 +106,9 @@ public class Elevator {
 		}
 	}
 
+	/**
+	 *
+	 */
 	private boolean checkStop(Simulator sim, Floor currentFloorObj) { // checks if lift is needed to stop at its currentFloor.
 		if (!queue.getOffload(sim, currentFloor).isEmpty() || requestsList.get(currentFloor)) {
 			return true;
@@ -96,6 +117,9 @@ public class Elevator {
 		}
 	}
 
+	/**
+	 *
+	 */
 	private int updateDestination(Simulator sim, Floor currentFloorObj) { // checks up+down/down+up for reqs/ if not, assume idle state
 
 		int nextUpDest = checkUp(sim);
@@ -121,6 +145,9 @@ public class Elevator {
 		return destinationFloor;
 	}
 
+	/**
+	 *
+	 */
 	private int checkUp(Simulator sim) {
 		int nextUpPerson = queue.getNextUpFloor(sim, currentFloor); // if is a floor, will return it, if not, returns noFloors
 		int nextUpReq = getNextUpReq(sim); // if is a floor, will return it, if not, returns noFloors
@@ -137,6 +164,9 @@ public class Elevator {
 
 	}
 
+	/**
+	 *
+	 */
 	private int checkDown(Simulator sim) {
 		int nextDownPerson = queue.getNextDownFloor(sim, currentFloor);
 		int nextDownReq = getNextDownReq(sim);
@@ -146,6 +176,9 @@ public class Elevator {
 		return lowTest; // either -1, or a floor to goto downwards. in any case, value is valid
 	}
 
+	/**
+	 *
+	 */
 	private int getNextUpReq(Simulator sim) {  // returns next up req floor. if none, returns noFloors
 		int noFloors = sim.getNoFloors();
 		int nextFloor = noFloors;
@@ -159,6 +192,9 @@ public class Elevator {
 		return nextFloor;  // if no floors, return -1
 	}
 
+	/**
+	 *
+	 */
 	private int getNextDownReq(Simulator sim) {  // return next down req. if none returns -1
 		int nextFloor = -1;
 		
@@ -171,6 +207,9 @@ public class Elevator {
 		return nextFloor;  // if no floors, return -1
 	}
 
+	/**
+	 *
+	 */
 	private void offloadPeople(Simulator sim, Floor currentFloorObj, List<Integer> offload) { // offloads people from lift if needed
 		if (!offload.isEmpty()) { // given there are people in the offload list to get off
 			for (int pID : offload) {
@@ -191,6 +230,9 @@ public class Elevator {
 		}
 	}
 
+	/**
+	 *
+	 */
 	private void onloadPeople(Simulator sim, Floor currentFloorObj) { // operations to onload people on currentfloor if there are people are waiting
 		if (requestsList.get(currentFloor)) { // checks if people want to get on
 			int waitingNum = currentFloorObj.getNumberWaiting(); // keeps track of people who have the capacity to get on. if not (meaning rivalry or too big), will decrement
@@ -228,6 +270,9 @@ public class Elevator {
 		}
 	}
 
+	/**
+	 *
+	 */
 	private HashMap<Integer, Boolean> requestsListSetup(int noFloors) {
 		HashMap<Integer, Boolean> reqList = new HashMap<Integer, Boolean>();
 		for (int floorNo = 0; floorNo <= noFloors - 1; floorNo++) {
@@ -236,18 +281,30 @@ public class Elevator {
 		return reqList;
 	}
 
+	/**
+	 *
+	 */
 	public void addRequest(int floorNo) { // notifies lift the button is pressed at the floor given
 		requestsList.put(floorNo, true);
 	}
 
+	/**
+	 *
+	 */
 	public int getCurrentFloor() {
 		return currentFloor;
 	}
 
+	/**
+	 *
+	 */
 	public List<Integer> getQueue() {
 		return queue.getQueue();
 	}
 
+	/**
+	 *
+	 */
 	public String getState() {
 		return state;
 	}

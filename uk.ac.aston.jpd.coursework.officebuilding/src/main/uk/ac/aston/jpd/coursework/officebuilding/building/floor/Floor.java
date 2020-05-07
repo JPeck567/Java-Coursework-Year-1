@@ -12,14 +12,22 @@ import uk.ac.aston.jpd.coursework.officebuilding.building.PQueue;
 import uk.ac.aston.jpd.coursework.officebuilding.building.elevator.Elevator;
 import uk.ac.aston.jpd.coursework.officebuilding.simulator.Simulator;
 
+/**
+*
+*/
 public class Floor {
-
+	/**
+	 *
+	 */
 	private final int FLOORNO;
 	private int toPress; // a toggle, in the case lift is full + people still waiting, will re press button and tell lift to stop when it next comes. button press occures after two ticks (one to close door, one after lift moves away), meaning values is at 3
 	private final Queue<Integer> waitingQueue;
 	private final List<Integer> onFloor;
 	public final Button button;
-
+	
+	/**
+	 *
+	 */
 	public Floor(int floorNo, Button button, Simulator sim) {
 		FLOORNO = floorNo;
 		toPress = 0;//
@@ -28,6 +36,9 @@ public class Floor {
 		this.button = button;
 	}
 
+	/**
+	 *
+	 */
 	public void tick(Building bld, Elevator e) {
 		//System.out.println("Floor " + FLOORNO + ". onFloor: " + onFloor.size() + ". waiting: " + waitingQueue.size());
 		if (button.isPressed()) { // operations related to if people have arrived to wait for list
@@ -49,55 +60,94 @@ public class Floor {
 			}
 		}
 	}
-
+	
+	/**
+	 *
+	 */
 	public boolean isWaitingEmpty() {
 		return waitingQueue.isEmpty();
 	}
 
+	/**
+	 *
+	 */
 	public void addToFloor(int pID) {
 		onFloor.add(pID);
 	}
-
+	
+	/**
+	 *
+	 */
 	public void addToWaiting(int pID) { // adds persons ID who pressed button to the waiting list 
 		waitingQueue.add(pID);
 	}
 	
+	/**
+	 *
+	 */
 	public void removeFromWaiting(int pID) {
 		waitingQueue.remove(pID);  // finds index of id so we can remove it if they are a impatient client
 	}
 	
+	/**
+	 *
+	 */
 	public int peekWaitingPerson() {
 		return waitingQueue.peek();
 	}
 	
+	/**
+	 *
+	 */
 	public int pollWaitingPerson() {
 		return waitingQueue.poll();
 	}
 	
+	/**
+	 *
+	 */
 	public void moveFrontToBack() {
 		waitingQueue.add(waitingQueue.poll());  // poll returns head and add will add the returned element to the queue in fifo fashion
 	}
 	
+	/**
+	 *
+	 */
 	public void pressButton(int pID) {
 		button.pressButton(pID);
 	}
-
+	
+	/**
+	 *
+	 */
 	public void reRequest() {
 		toPress = 1;
 	}
-
+	
+	/**
+	 *
+	 */
 	public void removeFromOnFloor(int pID) {
 		onFloor.remove(onFloor.indexOf(pID));
 	}
 	
+	/**
+	 *
+	 */
 	public Queue<Integer> getWaitingQueue(){
 		return waitingQueue;
 	}
-
+	
+	/**
+	 *
+	 */
 	public List<Integer> getOnFloorList() {
 		return onFloor;
 	}
-
+	
+	/**
+	 *
+	 */
 	public int getNumberWaiting() {
 		return waitingQueue.size();
 	}

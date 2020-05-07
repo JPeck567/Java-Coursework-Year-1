@@ -5,14 +5,24 @@ import java.util.Comparator;
 import uk.ac.aston.jpd.coursework.officebuilding.person.entities.Client;
 import uk.ac.aston.jpd.coursework.officebuilding.person.entities.Person;
 import uk.ac.aston.jpd.coursework.officebuilding.simulator.Simulator;
-
+/**
+*
+*/
 public class WaitingQueueComparator implements Comparator<Integer> {
+	/**
+	 *
+	 */
 	private final Simulator sim;
 
+	/**
+	 *
+	 */
 	public WaitingQueueComparator(Simulator sim) {
 		this.sim = sim;
 	}
-
+	/**
+	 *
+	 */
 	@Override
 	public int compare(Integer pID1, Integer pID2) {
 		Person p1 = sim.getPerson(pID1);

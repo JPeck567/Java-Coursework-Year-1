@@ -17,8 +17,13 @@ import uk.ac.aston.jpd.coursework.officebuilding.person.entities.Maintenance;
 import uk.ac.aston.jpd.coursework.officebuilding.person.entities.Person;
 import uk.ac.aston.jpd.coursework.officebuilding.simulator.Simulator;
 import uk.ac.aston.jpd.coursework.officebuilding.stats.Stats;
-
+/**
+*
+*/
 public class PersonHandler {
+	/**
+	 *
+	 */
 	private final Map<Integer, Person> people;
 	private final Map<Integer, Person> departedPeople;
 	private final Stats stat;
@@ -29,6 +34,9 @@ public class PersonHandler {
 	public static final int MAINTENANCEWEIGHT = 4;
 	public static final int DEFAULTSTARTINGTICK = 9999;
 	
+	/**
+	 *
+	 */
 	public PersonHandler(int empNo, int devNo, int seed, Simulator sim, double p, double q) {
 		people = new HashMap<Integer, Person>();
 		departedPeople = new HashMap<Integer, Person>();
@@ -38,6 +46,10 @@ public class PersonHandler {
 
 		setupPeopleEntry(sim);
 	}
+	
+	/**
+	 *
+	 */
 
 	public void tick(Simulator sim) {
 		randomDecisionTick(sim);
@@ -48,6 +60,9 @@ public class PersonHandler {
 		stat.tick(this, sim);
 	}
 
+	/**
+	 *
+	 */
 	private void randomDecisionTick(Simulator sim) {
 		int noFloors = sim.getNoFloors();
 		for (int pID : people.keySet()) {
@@ -74,6 +89,9 @@ public class PersonHandler {
 		}
 	}
 
+	/**
+	 *
+	 */
 	private void randomArrivalTick(Simulator sim) {
 		int noFloors = sim.getNoFloors();
 
@@ -99,6 +117,9 @@ public class PersonHandler {
 
 	}
 
+	/**
+	 *
+	 */
 	private void arrivalsTimeCheck(Simulator sim) {
 		List<Integer> toRemove = new ArrayList<Integer>();
 		int currentTick = sim.getTick();
@@ -134,6 +155,9 @@ public class PersonHandler {
 		removePeople(toRemove);
 	}
 	
+	/**
+	 *
+	 */
 	private void removePeople(List<Integer> toRemove) {
 		for (int pID : toRemove) {
 			departedPeople.put(pID, getPerson(pID));
@@ -141,6 +165,9 @@ public class PersonHandler {
 		}
 	}
 
+	/**
+	 *
+	 */
 	private void generatePeople(int empNo, int devNo, int noFloors) {
 		while (idCounter < devNo) { // creates developers and maps them to an id. also has a random company from static array
 			addPerson(new Developer(idCounter, getRandomDevFloor(0, noFloors), COMPANIES[stat.getRandomRangeNum(0, 1)])); 
@@ -151,17 +178,26 @@ public class PersonHandler {
 		}
 	}
 
+	/**
+	 *
+	 */
 	private void addPerson(Person p) {
 		people.put(p.getID(), p);
 		idCounter++;
 	}
 
+	/**
+	 *
+	 */
 	private void setupPeopleEntry(Simulator sim) {
 		for (Integer pID : people.keySet()) {
 			pressButton(sim, getPerson(pID));
 		}
 	}
 
+	/**
+	 *
+	 */
 	private void pressButton(Simulator sim, Person p) {
 		if (p.getDestination() == 0 && p.getCurrentFloor() == 0) {  // already at needed floor
 			sim.addToOnFloor(p.getID(), Simulator.DEFAULTFLOOR);
@@ -175,6 +211,9 @@ public class PersonHandler {
 		}	
 	}
 
+	/**
+	 *
+	 */
 	public int getRandomDevFloor(int currentFloor, int noFloors) {
 		noFloors--;  // as is +1 too high for random funct, which treats boundR inclusive. as floor G as 0, not 1, noFloors needs -1
 		while (true) {
@@ -185,6 +224,9 @@ public class PersonHandler {
 		}
 	}
 
+	/**
+	 *
+	 */
 	public int getRandomEmpFloor(int currentFloor, int noFloors) {
 		while (true) {
 			int randFloor = stat.getRandomFloor(noFloors); // keeps trying for a random floor until it isn't the current floor of the person
@@ -194,22 +236,37 @@ public class PersonHandler {
 		}
 	}
 
+	/**
+	 *
+	 */
 	public int getRandomCliFloor(int noFloors) {
 		return stat.getRandomRangeNum(0, ((noFloors - 1) / 2));
 	}
 
+	/**
+	 *
+	 */
 	public Person getPerson(int pID) {
 		return people.get(pID);
 	}
 
+	/**
+	 *
+	 */
 	public void removePerson(int pID) {
 		people.remove(pID);
 	}
-
+	
+	/**
+	 *
+	 */
 	public int getComplaints() {
 		return noComplaints;
 	}
 	
+	/**
+	 *
+	 */
 	public HashMap<Integer, Double> getAvgWaitingTime(){
 		HashMap<Integer, Person> allPeople = new HashMap<Integer, Person>();
 		allPeople.putAll(people);
