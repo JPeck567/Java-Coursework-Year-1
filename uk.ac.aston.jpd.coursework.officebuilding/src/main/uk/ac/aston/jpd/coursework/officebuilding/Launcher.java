@@ -6,54 +6,66 @@ import uk.ac.aston.jpd.coursework.officebuilding.simulator.Simulator;
 /**
  * 
  * @author Team 46
- * @author 190148289
- * @author 190095097
- * @author 190055002
- * @author 190174923
+ * @author 190148289 Jennifer A. Appiah
+ * @author 190095097 Hannah Elliman
+ * @author 190055002 Jorge Peck
+ * @author 190174923 Hongyi Wang
  * @version 1.0
- * @since 2020
+ * @since 2020 Coursework
+ * 
+ * 
+ * @summary This Class Creates instances of the simulator and the interfacer.
  * 
  */
 public class Launcher {
 	/**
+	 * Declaring variables
 	 * 
-	 * @param sim to initialise the simulation
+	 * @param sim       to initialise the simulation
 	 * @param interface grabs parameters needed and displays the simulation
 	 * 
 	 */
 
 	private final Simulator sim;
 	private final Interfacer interfacer;
-/**
- * @param Launcher constructor
- * 
- */
+
+	/**
+	 * This is the constructor class that initialise the variable
+	 */
 	public Launcher() {
 		interfacer = new Interfacer();
 
 		sim = createSimulator();
 	}
-/**
- * @
- * @throws InterruptedException
- * 
- */
+
+	/**
+	 * This main method creates a new launcher
+	 * 
+	 * @param args
+	 * @throws InterruptedException
+	 */
 	public static void main(String args[]) throws InterruptedException {
 		Launcher l = new Launcher();
 		l.launch();
 	}
-/**
- * @return an initialised simulator
- * 
- */
+
+	/**
+	 * This method constructs a new simulator object based on the values the
+	 * interfacer gets from the user
+	 * 
+	 * @return this returns a new simulator object
+	 */
 	private Simulator createSimulator() {
 		return new Simulator(7, 4, interfacer.getEmpNo(), interfacer.getDevNo(), interfacer.getSeed(),
 				interfacer.getP(), interfacer.getQ());
 	}
-/**
- * @throws an InterruptedException
- * 
- */
+
+	/**
+	 * The launch method will start the simulator's tick loop
+	 * 
+	 * @throws InterruptedException This method throws and interrupted exception if
+	 *                              the program is interrupted
+	 */
 	private void launch() throws InterruptedException {
 		sim.run(interfacer);
 	}

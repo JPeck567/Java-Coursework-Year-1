@@ -116,7 +116,7 @@ public class Person {
 	/**
 	 *
 	 */
-	public void addToLift(int currentTick) {
+	public void addToElevator(int currentTick) {
 		isWaiting = false;
 		currentFloor = -1; // sets person to travelling state which is -1 (meaning on elevator)
 		waitTimeList.add(currentTick - waitingTick);
