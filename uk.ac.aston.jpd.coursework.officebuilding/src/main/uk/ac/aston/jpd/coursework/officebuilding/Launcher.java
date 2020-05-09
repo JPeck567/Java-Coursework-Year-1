@@ -1,6 +1,5 @@
 package uk.ac.aston.jpd.coursework.officebuilding;
 
-import java.util.Random;
 import uk.ac.aston.jpd.coursework.officebuilding.interfacer.Interfacer;
 import uk.ac.aston.jpd.coursework.officebuilding.simulator.Simulator;
 
@@ -35,6 +34,15 @@ public class Launcher {
 		sim = createSimulator();
 	}
 /**
+ * @
+ * @throws InterruptedException
+ * 
+ */
+	public static void main(String args[]) throws InterruptedException {
+		Launcher l = new Launcher();
+		l.launch();
+	}
+/**
  * @return an initialised simulator
  * 
  */
@@ -48,14 +56,5 @@ public class Launcher {
  */
 	private void launch() throws InterruptedException {
 		sim.run(interfacer);
-	}
-/**
- * @
- * @throws InterruptedException
- * 
- */
-	public static void main(String args[]) throws InterruptedException {
-		Launcher l = new Launcher();
-		l.launch();
 	}
 }

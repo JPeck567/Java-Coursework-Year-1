@@ -54,10 +54,7 @@ public class PersonHandler {
 	public void tick(Simulator sim) {
 		randomDecisionTick(sim);
 		randomArrivalTick(sim);
-		
 		arrivalsTimeCheck(sim);
-
-		stat.tick(this, sim);
 	}
 
 	/**
@@ -96,25 +93,16 @@ public class PersonHandler {
 		int noFloors = sim.getNoFloors();
 
 		if (stat.getMArrivalProb()) {
-			int timeAvailable = (stat.getRandomRangeNum(20, 40) * 60) / 10; // number of ticks to stay in building. random amount of time from 20 to 40 mins 
-			Person p = new Maintenance(idCounter, noFloors - 1, timeAvailable); // maintenance goto top floor
-
+			Person p = new Maintenance(idCounter, stat, noFloors);
 			addPerson(p);
-			pressButton(sim, p);
-
-			//System.out.println("Maintenance crew " + p.getID() + " has arrived!");
+			p.pressButton(sim);
 		}
 
 		if (stat.getCArrivalProb()) {
-			int timeAvailable = (stat.getRandomRangeNum(10, 30) * 60) / 10; // number of ticks to stay in building. random amount of time from 10 to 30 mins
-			Person p = new Client(idCounter, getRandomCliFloor(noFloors), timeAvailable, sim.getTick()); // integer division, so whole num. clients goto bottom half
-
+			Person p = new Client(idCounter, stat, noFloors, sim.getTick());
 			addPerson(p);
-			pressButton(sim, p);
-
-			//System.out.println("Client " + p.getID() + " has arrived!");
+			p.pressButton(sim);
 		}
-
 	}
 
 	/**
@@ -144,7 +132,7 @@ public class PersonHandler {
 							toRemove.add(arrP.getID());
 						}
 					} else {  // not on way to exit, so we make them go on their way
-						pressButton(sim, p);
+						p.pressButton(sim);
 						p.setDestination(0);
 						arrP.setToExit(true);
 						sim.removeFromFloor(p.getCurrentFloor(), p.getID());
@@ -170,11 +158,11 @@ public class PersonHandler {
 	 */
 	private void generatePeople(int empNo, int devNo, int noFloors) {
 		while (idCounter < devNo) { // creates developers and maps them to an id. also has a random company from static array
-			addPerson(new Developer(idCounter, getRandomDevFloor(0, noFloors), COMPANIES[stat.getRandomRangeNum(0, 1)])); 
+			addPerson(new Developer(idCounter, stat, noFloors)); 
 		}
 
 		while (idCounter < devNo + empNo) { // creates employers and maps them to an id. the first emp's id is the next one from the last dev's id
-			addPerson(new Employee(idCounter, stat.getRandomFloor(noFloors)));  // randomfloor is exclusive to noFloors, so is fine to pass in noFloors w/o -1
+			addPerson(new Employee(idCounter, stat, noFloors));  // randomfloor is exclusive to noFloors, so is fine to pass in noFloors w/o -1
 		}
 	}
 
@@ -191,7 +179,7 @@ public class PersonHandler {
 	 */
 	private void setupPeopleEntry(Simulator sim) {
 		for (Integer pID : people.keySet()) {
-			pressButton(sim, getPerson(pID));
+			people.get(pID).pressButton(sim);
 		}
 	}
 
@@ -199,22 +187,13 @@ public class PersonHandler {
 	 *
 	 */
 	private void pressButton(Simulator sim, Person p) {
-		if (p.getDestination() == 0 && p.getCurrentFloor() == 0) {  // already at needed floor
-			sim.addToOnFloor(p.getID(), Simulator.DEFAULTFLOOR);
-			
-			if(p instanceof ArrivingPerson) {
-				// special case as usually would set starting tick in elevators offload method, but cannot if already at floor, and doesn't need the elevator
-				((ArrivingPerson) p).setStartingTick(sim.getTick());
-			}
-		} else {
-			p.pressButton(sim);
-		}	
-	}
+		p.pressButton(sim);
+	}	
 
 	/**
 	 *
 	 */
-	public int getRandomDevFloor(int currentFloor, int noFloors) {
+	private int getRandomDevFloor(int currentFloor, int noFloors) {
 		noFloors--;  // as is +1 too high for random funct, which treats boundR inclusive. as floor G as 0, not 1, noFloors needs -1
 		while (true) {
 			int randFloor = stat.getRandomRangeNum(noFloors / 2, noFloors); // keeps trying for a random floor until it isn't the current floor of the person
@@ -227,7 +206,7 @@ public class PersonHandler {
 	/**
 	 *
 	 */
-	public int getRandomEmpFloor(int currentFloor, int noFloors) {
+	private int getRandomEmpFloor(int currentFloor, int noFloors) {
 		while (true) {
 			int randFloor = stat.getRandomFloor(noFloors); // keeps trying for a random floor until it isn't the current floor of the person
 			if (randFloor != currentFloor) {
@@ -281,5 +260,9 @@ public class PersonHandler {
 		}
 		
 		return peopleAvgWaitTime;
+	}
+	
+	public void addPersonForTest(Person p) {
+		people.put(p.getID(), p);
 	}
 }

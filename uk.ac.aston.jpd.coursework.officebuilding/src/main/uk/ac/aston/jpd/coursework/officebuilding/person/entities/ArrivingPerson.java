@@ -1,22 +1,30 @@
 package uk.ac.aston.jpd.coursework.officebuilding.person.entities;
 
 import uk.ac.aston.jpd.coursework.officebuilding.person.handler.PersonHandler;
+import uk.ac.aston.jpd.coursework.officebuilding.simulator.Simulator;
+import uk.ac.aston.jpd.coursework.officebuilding.stats.Stats;
 /**
 *
 */
 public class ArrivingPerson extends Person{
-	private int startingTick;  // as opposed to waiting tick of people class, starting tick is updated once only.
+	protected int startingTick;  // as opposed to waiting tick of people class, starting tick is updated once only.
 	private final int timeAvailable;
 	private boolean toExit;
 	
 	/**
 	 *
 	 */
-	public ArrivingPerson(int weight, int id, int destination, int timeAvailable) {
-		super(weight, id, destination);
+	public ArrivingPerson(int weight, int id, int timeAvailable) {
+		super(weight, id);
 		this.startingTick = PersonHandler.DEFAULTSTARTINGTICK;
 		this.timeAvailable = timeAvailable;
 		this.toExit = false;
+	}
+	
+	public void tick() {
+		if(startingTick == PersonHandler.DEFAULTSTARTINGTICK) {
+			
+		}
 	}
 	
 	/**
@@ -29,6 +37,12 @@ public class ArrivingPerson extends Person{
 		return false;
 	}
 	
+	@Override
+	protected void addSelfToFloor(Simulator sim) {
+		super.addSelfToFloor(sim);
+		startingTick = sim.getTick();
+	}
+
 	/**
 	 *
 	 */
@@ -56,4 +70,6 @@ public class ArrivingPerson extends Person{
 	public void setToExit(boolean b) {
 		toExit = b;
 	}
+	
+
 }

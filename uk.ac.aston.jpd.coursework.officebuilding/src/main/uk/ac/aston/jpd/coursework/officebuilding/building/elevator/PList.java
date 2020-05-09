@@ -1,4 +1,4 @@
-package uk.ac.aston.jpd.coursework.officebuilding.building;
+package uk.ac.aston.jpd.coursework.officebuilding.building.elevator;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,7 +18,7 @@ import uk.ac.aston.jpd.coursework.officebuilding.simulator.Simulator;
 /**
 *
 */
-public class PQueue { 
+public class PList { 
 	/**
 	 * used for the elevator
 	 *
@@ -29,7 +29,7 @@ public class PQueue {
 	/**
 	 *
 	 */
-	public PQueue(int size) {
+	public PList(int size) {
 		this.SIZE = size;
 		queue = new ArrayList<Integer>(size);
 	}
@@ -37,8 +37,8 @@ public class PQueue {
 	/**
 	 *
 	 */
-	public int removePerson(int index) {
-		return queue.remove(index);
+	public void removePerson(int index) {
+		queue.remove(index);
 	}
 
 	/**
@@ -113,7 +113,7 @@ public class PQueue {
 	 *
 	 */
 	public List<Integer> getQueue() {
-		return queue;
+		return new ArrayList<Integer>(queue);
 	}
 
 	/**

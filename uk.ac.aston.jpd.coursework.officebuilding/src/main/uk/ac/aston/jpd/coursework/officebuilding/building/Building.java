@@ -12,6 +12,7 @@ package uk.ac.aston.jpd.coursework.officebuilding.building;
 
 import uk.ac.aston.jpd.coursework.officebuilding.building.elevator.Elevator;
 import uk.ac.aston.jpd.coursework.officebuilding.building.floor.Floor;
+import uk.ac.aston.jpd.coursework.officebuilding.building.floor.WaitingQueueComparator;
 import uk.ac.aston.jpd.coursework.officebuilding.simulator.Simulator;
 
 import java.util.ArrayList;
@@ -31,13 +32,13 @@ public class Building {
 	 * Class constructor constructing the elevator.
 	 * @param e
 	 * @param noFloors
-	 * @param sim
+	 * @param c
 	 * 
 	 */
-	public Building(Elevator e, int noFloors, Simulator sim) {
+	public Building(Elevator e, int noFloors, WaitingQueueComparator c) {
 		this.elevator = e;
 		floors = new Floor[noFloors];
-		generateFloors(noFloors, sim);
+		generateFloors(noFloors, c);
 	}
 /**
  *
@@ -53,12 +54,12 @@ public class Building {
 /**
  * 
  * @param noFloors
- * @param sim
+ * @param c
  * 
  */
-	private void generateFloors(int noFloors, Simulator sim) {
+	private void generateFloors(int noFloors, WaitingQueueComparator c) {
 		for (int i = 0; i < noFloors; i++) {
-			floors[i] = new Floor(i, new Button(i), sim);
+			floors[i] = new Floor(i, new Button(i), c);
 		}
 	}
 /**
@@ -85,5 +86,10 @@ public class Building {
 	 */
 	public String getElevatorState() {
 		return elevator.getState();
+		
+		
+	}
+	public Elevator getElevatorForTest() {
+		return elevator;
 	}
 }

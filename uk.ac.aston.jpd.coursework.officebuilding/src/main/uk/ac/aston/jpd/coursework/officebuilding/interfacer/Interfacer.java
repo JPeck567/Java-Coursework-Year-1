@@ -3,6 +3,7 @@ package uk.ac.aston.jpd.coursework.officebuilding.interfacer;
 import java.util.Collection;
 import java.util.InputMismatchException;
 import java.util.List;
+import java.util.Queue;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
@@ -11,11 +12,12 @@ import uk.ac.aston.jpd.coursework.officebuilding.building.floor.Floor;
 import uk.ac.aston.jpd.coursework.officebuilding.simulator.Simulator;
 
 public class Interfacer {
+	public static Scanner sc;
 	public Interfacer() {
-
+		sc = new Scanner(System.in);
 	}
 
-	public void printSimulation(Simulator sim, int tick, Floor[] floors, List<String> elevatorQueue,
+	public void printSimulation(Simulator sim, int tick, List<Queue<Integer>> floorWaitingQueues, List<List<Integer>> floorOnFloorLists, List<String> elevatorQueue,
 			String elevatorState, int elevatorCurrentFloor, int noComplaints) {
 		StringBuilder output = new StringBuilder();
 
@@ -28,12 +30,12 @@ public class Interfacer {
 			elevatorQueueStr = elevatorQueueStr.substring(1, elevatorQueueStr.length());
 		}
 
-		for (int floor = 0; floor < floors.length; floor++) {
-			Floor f = floors[floor];
-			List<String> onFloorStr = f.getOnFloorList().stream().map(pID -> sim.getPerson(pID).toString())
+		for (int floor = 0; floor < floorWaitingQueues.size(); floor++) {
+			List<String> onFloorStr = floorOnFloorLists.get(floor).stream().map(pID -> sim.getPerson(pID).toString())
 					.collect(Collectors.toList());
-			List<String> waitingStr = f.getWaitingQueue().stream().map(pID -> sim.getPerson(pID).toString())
+			List<String> waitingStr = floorWaitingQueues.get(floor).stream().map(pID -> sim.getPerson(pID).toString())
 					.collect(Collectors.toList());
+			
 			//String.format("|%-20|", 93); // prints: |93                  |
 
 			String floorPrint = "On Floor " + String.format("%-30s", onFloorStr) + "Waiting "
@@ -51,29 +53,20 @@ public class Interfacer {
 	}
 
 	public int readInt() {
-		Scanner in = new Scanner(System.in);
-		while (!in.hasNextInt()) {
+		while (!sc.hasNextInt()) {
 			System.out.println("Value must be an integer: ");
-			in.nextLine();
+			sc.nextLine();
 		}
-
-		int input = in.nextInt();
-		in.close();
-
-		return input;
+		return sc.nextInt();
 	}
 
 	public double readDouble() {
-		Scanner in = new Scanner(System.in);
-		while (!in.hasNextDouble()) {
+		while (!sc.hasNextDouble()) {
 			System.out.println("Value must be a double: ");
-			in.nextLine();
+			sc.nextLine();
 		}
 
-		double input = in.nextDouble();
-		in.close();
-
-		return input;
+		return sc.nextDouble();
 	}
 
 	public int getEmpNo() {

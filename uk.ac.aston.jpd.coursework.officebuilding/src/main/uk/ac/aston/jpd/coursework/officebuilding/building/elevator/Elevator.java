@@ -13,7 +13,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import uk.ac.aston.jpd.coursework.officebuilding.building.Building;
-import uk.ac.aston.jpd.coursework.officebuilding.building.PQueue;
 import uk.ac.aston.jpd.coursework.officebuilding.building.floor.Floor;
 import uk.ac.aston.jpd.coursework.officebuilding.simulator.Simulator;
 import uk.ac.aston.jpd.coursework.officebuilding.person.entities.ArrivingPerson;
@@ -27,21 +26,21 @@ public class Elevator {
 	 *
 	 */
 	private String state;
-	private final PQueue queue; // space to hold people to get in the elevator
-	private final Map<Integer, Boolean> requestsList; // to know where people are to get in lift
+	private final PList queue; // space to hold people to get in the elevator
+	private final Map<Integer, Boolean> requestsMap; // to know where people are to get in lift
 	private char direction;
 	private int currentFloor;
 
 	/**
 	 *
 	 */
-	public Elevator(PQueue queue, int noFloors) {
+	public Elevator(PList queue, int noFloors) {
 		direction = 'I'; // meaning idle and not moving anywhere
 		currentFloor = 0;
 		state = "close"; // initially closed. will change to open then ready then close.
 
 		this.queue = queue;
-		requestsList = requestsListSetup(noFloors);
+		requestsMap = requestsListSetup(noFloors);
 
 	}
 
@@ -57,7 +56,7 @@ public class Elevator {
 			moveFloor();
 		}
 
-		setDirection(updateDestination(sim, currentFloorObj));
+		setDirection(updateDestination(sim));
 	}
 
 	/**
@@ -110,7 +109,7 @@ public class Elevator {
 	 *
 	 */
 	private boolean checkStop(Simulator sim, Floor currentFloorObj) { // checks if lift is needed to stop at its currentFloor.
-		if (!queue.getOffload(sim, currentFloor).isEmpty() || requestsList.get(currentFloor)) {
+		if (!queue.getOffload(sim, currentFloor).isEmpty() || requestsMap.get(currentFloor)) {
 			return true;
 		} else {
 			return false;
@@ -120,7 +119,7 @@ public class Elevator {
 	/**
 	 *
 	 */
-	private int updateDestination(Simulator sim, Floor currentFloorObj) { // checks up+down/down+up for reqs/ if not, assume idle state
+	private int updateDestination(Simulator sim) { // checks up+down/down+up for reqs/ if not, assume idle state
 
 		int nextUpDest = checkUp(sim);
 		int nextDownDest = checkDown(sim);
@@ -184,7 +183,7 @@ public class Elevator {
 		int nextFloor = noFloors;
 
 		for (int floor = currentFloor + 1; floor <= noFloors - 1; floor++) { // checks for requests going down from currentfloor to bottom. terminates when found
-			if (requestsList.get(floor)) {
+			if (requestsMap.get(floor)) {
 				nextFloor = floor;
 				break;
 			}
@@ -199,7 +198,7 @@ public class Elevator {
 		int nextFloor = -1;
 		
 		for(int floor = currentFloor - 1; floor >= 0; floor--) { // checks for requests going up from currentfloor to top floor. terminates when found
-			if(requestsList.get(floor)) {
+			if(requestsMap.get(floor)) {
 				nextFloor = floor;
 				break;
 			}
@@ -214,10 +213,7 @@ public class Elevator {
 		if (!offload.isEmpty()) { // given there are people in the offload list to get off
 			for (int pID : offload) {
 				Person p = sim.getPerson(pID);
-				queue.removePerson(queue.indexOf(pID)); // removes from queue
-				p.setCurrentFloor(currentFloor);
-
-				currentFloorObj.addToFloor(pID);
+				removeFromLift(sim, currentFloorObj, p);
 
 				if (p instanceof ArrivingPerson) {
 					ArrivingPerson arrP = (ArrivingPerson) p;
@@ -234,7 +230,7 @@ public class Elevator {
 	 *
 	 */
 	private void onloadPeople(Simulator sim, Floor currentFloorObj) { // operations to onload people on currentfloor if there are people are waiting
-		if (requestsList.get(currentFloor)) { // checks if people want to get on
+		if (requestsMap.get(currentFloor)) { // checks if people want to get on
 			int waitingNum = currentFloorObj.getNumberWaiting(); // keeps track of people who have the capacity to get on. if not (meaning rivalry or too big), will decrement
 			// will only perform the onload operation if there is space on the elevator
 			// gets specified number of people from queue and adds it to current queue. gets indexes from 0 to the number of spaces on lift
@@ -253,21 +249,32 @@ public class Elevator {
 							continue; // cuts code body early and moves to next iteration. don't want to add person if moved to back of queue
 						}
 					}
-
-					queue.addPerson(p.getID());
-					p.addToLift(sim.getTick());
-					currentFloorObj.pollWaitingPerson(); // removes given person
+					addToLift(sim, currentFloorObj, p);
 				}
 
 				waitingNum--; // if cannot fit on lift queue, or has moved person to lift, will lowers number waiting as a candidate to get on lift
 			}
 
-			requestsList.put(currentFloor, false);
+			requestsMap.put(currentFloor, false);
 
 			if (!currentFloorObj.isWaitingEmpty()) { // checks if still people on waiting to get on, due to lift being full and people cannot get on
 				currentFloorObj.reRequest();
 			}
 		}
+	}
+	
+	private void addToLift(Simulator sim, Floor currentFloorObj, Person p) {
+		queue.addPerson(p.getID());
+		p.addToLift(sim.getTick());
+		currentFloorObj.pollWaitingPerson(); // removes given person
+	}
+	
+	
+	private void removeFromLift(Simulator sim, Floor currentFloorObj, Person p) {
+		int pID = p.getID();
+		queue.removePerson(queue.indexOf(pID)); // removes from queue
+		p.setCurrentFloor(currentFloor);
+		currentFloorObj.addToFloor(pID);
 	}
 
 	/**
@@ -285,7 +292,7 @@ public class Elevator {
 	 *
 	 */
 	public void addRequest(int floorNo) { // notifies lift the button is pressed at the floor given
-		requestsList.put(floorNo, true);
+		requestsMap.put(floorNo, true);
 	}
 
 	/**
@@ -308,4 +315,18 @@ public class Elevator {
 	public String getState() {
 		return state;
 	}
+	
+	
+	public void addPersonTest(int pID) {  // for testing
+		queue.addPerson(pID);
+	}
+	
+	public boolean getRequestForTest(int floor) {
+		return requestsMap.get(floor);
+	}
+
+	public char getDirectionForTest() {
+		return direction;
+	}
+
 }

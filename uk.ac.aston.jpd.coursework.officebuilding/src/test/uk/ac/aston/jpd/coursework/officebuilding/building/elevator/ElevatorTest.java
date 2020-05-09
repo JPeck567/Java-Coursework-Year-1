@@ -13,7 +13,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import uk.ac.aston.jpd.coursework.officebuilding.building.Building;
-import uk.ac.aston.jpd.coursework.officebuilding.building.PQueue;
 import uk.ac.aston.jpd.coursework.officebuilding.building.floor.Floor;
 import uk.ac.aston.jpd.coursework.officebuilding.simulator.Simulator;
 import uk.ac.aston.jpd.coursework.officebuilding.person.entities.ArrivingPerson;

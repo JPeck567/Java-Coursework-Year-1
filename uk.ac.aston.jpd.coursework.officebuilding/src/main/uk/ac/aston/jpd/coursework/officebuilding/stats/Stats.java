@@ -26,11 +26,6 @@ public class Stats {
 		decSim = new DecisionSimulator(p);
 		arrSim = new ArrivalSimulator(q);
 	}
-
-	public void tick(PersonHandler pHandle, Simulator sim) {
-
-	}
-
 	public boolean getDecisionProb() {
 		return decSim.getProb(rnd.nextDouble());
 	}

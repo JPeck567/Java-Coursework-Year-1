@@ -1,6 +1,7 @@
 package uk.ac.aston.jpd.coursework.officebuilding.person.entities;
 
 import uk.ac.aston.jpd.coursework.officebuilding.person.handler.PersonHandler;
+import uk.ac.aston.jpd.coursework.officebuilding.stats.Stats;
 /**
 *
 */
@@ -13,9 +14,16 @@ public class Client extends ArrivingPerson {
 	/**
 	 *
 	 */
-	public Client(int id, int destination, int timeAvailable, int entranceTick) {
-		super(PersonHandler.DEFAULTWEIGHT, id, destination, timeAvailable);
+	public Client(int id, Stats stat, int noFloors, int entranceTick) {
+		super(PersonHandler.DEFAULTWEIGHT, id, stat.getRandomRangeNum(10, 30) * 60 / 10);
+		this.destination = getRandomFloor(stat, 0, (noFloors - 1) / 2);
 		this.entranceTick = entranceTick;
+	}
+	
+	public void tick(Simulator sim) {
+		if(isComplaining(sim.getTick()) && isWaiting) {
+			
+		}
 	}
 
 	/**

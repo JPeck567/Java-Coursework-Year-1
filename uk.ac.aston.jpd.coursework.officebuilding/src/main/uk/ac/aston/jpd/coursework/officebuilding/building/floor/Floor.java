@@ -8,8 +8,8 @@ import java.util.PriorityQueue;
 
 import uk.ac.aston.jpd.coursework.officebuilding.building.Building;
 import uk.ac.aston.jpd.coursework.officebuilding.building.Button;
-import uk.ac.aston.jpd.coursework.officebuilding.building.PQueue;
 import uk.ac.aston.jpd.coursework.officebuilding.building.elevator.Elevator;
+import uk.ac.aston.jpd.coursework.officebuilding.building.elevator.PList;
 import uk.ac.aston.jpd.coursework.officebuilding.simulator.Simulator;
 
 /**
@@ -28,10 +28,10 @@ public class Floor {
 	/**
 	 *
 	 */
-	public Floor(int floorNo, Button button, Simulator sim) {
+	public Floor(int floorNo, Button button, WaitingQueueComparator c) {
 		FLOORNO = floorNo;
 		toPress = 0;//
-		this.waitingQueue = new PriorityQueue<Integer>(new WaitingQueueComparator(sim));
+		this.waitingQueue = new PriorityQueue<Integer>(c);
 		onFloor = new ArrayList<Integer>();
 		this.button = button;
 	}
@@ -78,7 +78,7 @@ public class Floor {
 	/**
 	 *
 	 */
-	public void addToWaiting(int pID) { // adds persons ID who pressed button to the waiting list 
+	private void addToWaiting(int pID) { // adds persons ID who pressed button to the waiting list 
 		waitingQueue.add(pID);
 	}
 	
@@ -135,14 +135,14 @@ public class Floor {
 	 *
 	 */
 	public Queue<Integer> getWaitingQueue(){
-		return waitingQueue;
+		return new PriorityQueue<Integer>(waitingQueue);
 	}
 	
 	/**
 	 *
 	 */
 	public List<Integer> getOnFloorList() {
-		return onFloor;
+		return new ArrayList<Integer>(onFloor);
 	}
 	
 	/**

@@ -9,17 +9,11 @@ public class ArrivalSimulator {
 	}
 
 	public boolean getProbCli(double randNum) {
-		if (randNum < probQClient) {
-			return true;
-		}
-		return false;
+		return randNum < probQClient;
+
 	}
 
 	public boolean getProbMain(double randNum) {
-		if(PROBQMAIN > randNum) {
-			return true;
-		}
-		return false;
+		return randNum < PROBQMAIN;
 	}
-
 }
