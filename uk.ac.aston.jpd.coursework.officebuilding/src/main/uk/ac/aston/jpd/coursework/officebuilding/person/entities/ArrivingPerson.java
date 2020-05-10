@@ -54,9 +54,11 @@ public class ArrivingPerson extends Person {
  * this is used as an interfacer between the building class and to get the current tick
  * @param pHandle
  * this is used in the leave method
+ * @param stat
+ * this is used to provide people with their probabilities 
  */
-
-	public void tick(Simulator sim, PersonHandler pHandle) {  // overloading method
+@Override
+	public void tick(Simulator sim, PersonHandler pHandle, Stats stat) {  // overloading method
 		if (startingTick != PersonHandler.DEFAULTSTARTINGTICK) { // if gotten to req floor
 			if (isTimeTaken(sim.getTick())) { // if time limit is up
 				if(toExit) {
