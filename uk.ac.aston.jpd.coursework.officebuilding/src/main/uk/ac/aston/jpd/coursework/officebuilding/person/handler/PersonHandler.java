@@ -26,6 +26,7 @@ public class PersonHandler {
 	 */
 	private final Map<Integer, Person> people;
 	private final Map<Integer, Person> departedPeople;
+	private final List<Integer> toRemove;
 	private final Stats stat;
 	private int idCounter;
 	private int noComplaints;
@@ -40,11 +41,12 @@ public class PersonHandler {
 	public PersonHandler(int empNo, int devNo, int seed, Simulator sim, double p, double q) {
 		people = new HashMap<Integer, Person>();
 		departedPeople = new HashMap<Integer, Person>();
+		toRemove = new ArrayList<Integer>();
 		idCounter = 0;
 		stat = new Stats(seed, p, q);
-		generatePeople(empNo, devNo, sim.getNoFloors());
+		generatePeople(sim, empNo, devNo, sim.getNoFloors());
 
-		setupPeopleEntry(sim);
+		//setupPeopleEntry(sim);
 	}
 	
 	/**
@@ -52,38 +54,13 @@ public class PersonHandler {
 	 */
 
 	public void tick(Simulator sim) {
-		randomDecisionTick(sim);
 		randomArrivalTick(sim);
-		arrivalsTimeCheck(sim);
-	}
-
-	/**
-	 *
-	 */
-	private void randomDecisionTick(Simulator sim) {
-		int noFloors = sim.getNoFloors();
-		for (int pID : people.keySet()) {
-			Person p = getPerson(pID);
-
-			if (p.getCurrentFloor() != -1 && !p.isWaiting()) { // can only decide to change floor is not on lift, is not waiting already
-
-				if (stat.getDecisionProb()) {
-					if (p instanceof Developer) {
-						p.setDestination(getRandomDevFloor(p.getCurrentFloor(), noFloors));
-					} else if (p instanceof Employee) { // is employee
-						p.setDestination(getRandomEmpFloor(p.getCurrentFloor(), noFloors));
-					} else {  // a client or maintenance
-						break;
-					}
-
-					sim.removeFromFloor(p.getCurrentFloor(), pID);
-					p.pressButton(sim);
-					//System.out.println("Change floor! " + p.getClass().getSimpleName() + " ID:" + p.getID()
-					//		+ " on floor: " + p.getCurrentFloor() + " to: " + p.getDestination());
-
-				}
-			}
+		
+		for(Person p : people.values()) {
+			p.tick(sim, this, stat);
 		}
+		
+		removePeople();
 	}
 
 	/**
@@ -93,76 +70,47 @@ public class PersonHandler {
 		int noFloors = sim.getNoFloors();
 
 		if (stat.getMArrivalProb()) {
-			Person p = new Maintenance(idCounter, stat, noFloors);
-			addPerson(p);
-			p.pressButton(sim);
+			ArrivingPerson p = new Maintenance(idCounter, stat, noFloors);
+			addPerson((Person) p);
+			p.arrive(sim);
 		}
 
 		if (stat.getCArrivalProb()) {
-			Person p = new Client(idCounter, stat, noFloors, sim.getTick());
-			addPerson(p);
-			p.pressButton(sim);
+			ArrivingPerson p = new Client(idCounter, stat, noFloors, sim.getTick());
+			addPerson((Person) p);
+			p.arrive(sim);
 		}
 	}
 
-	/**
-	 *
-	 */
-	private void arrivalsTimeCheck(Simulator sim) {
-		List<Integer> toRemove = new ArrayList<Integer>();
-		int currentTick = sim.getTick();
-
-		for (Person p : people.values()) {
-			if (p instanceof ArrivingPerson) {
-				ArrivingPerson arrP = (ArrivingPerson) p;
-				
-				if(arrP.getStartingTick() == DEFAULTSTARTINGTICK) { // if arrival is not yet gotten to requested floor
-					if(arrP instanceof Client) {  // and is client
-						Client c = (Client) arrP;
-						if(c.isComplaining(currentTick) && c.isWaiting()) {  // if taken too long to wait for elevator, and not waiting (as will still check even if on elevator)
-							sim.removeFromWaiting(p.getCurrentFloor(), p.getID());
-							toRemove.add(arrP.getID());
-							noComplaints++;
-						}
-					}
-				} else if (arrP.isTimeTaken(currentTick)) { // arrival is at it's req floor and is taken the alloted amount of time to stay in the building
-					if (arrP.getToExit()) { // if on way to exit
-						if(arrP.getCurrentFloor() == 0) {  // and has gotten to ground
-							sim.removeFromFloor(p.getCurrentFloor(), p.getID());
-							toRemove.add(arrP.getID());
-						}
-					} else {  // not on way to exit, so we make them go on their way
-						p.pressButton(sim);
-						p.setDestination(0);
-						arrP.setToExit(true);
-						sim.removeFromFloor(p.getCurrentFloor(), p.getID());
-					}
-				}
-			}
-		}
-		removePeople(toRemove);
+	public void addToRemove(int pID) {
+		toRemove.add(pID);
 	}
 	
 	/**
 	 *
 	 */
-	private void removePeople(List<Integer> toRemove) {
+	private void removePeople() {
 		for (int pID : toRemove) {
 			departedPeople.put(pID, getPerson(pID));
 			removePerson(pID);
 		}
+		toRemove.clear();
 	}
 
 	/**
 	 *
 	 */
-	private void generatePeople(int empNo, int devNo, int noFloors) {
+	private void generatePeople(Simulator sim, int empNo, int devNo, int noFloors) {
 		while (idCounter < devNo) { // creates developers and maps them to an id. also has a random company from static array
-			addPerson(new Developer(idCounter, stat, noFloors)); 
+			Person p = new Developer(idCounter, stat, noFloors);
+			addPerson(p);
+			p.arrive(sim);
 		}
 
 		while (idCounter < devNo + empNo) { // creates employers and maps them to an id. the first emp's id is the next one from the last dev's id
-			addPerson(new Employee(idCounter, stat, noFloors));  // randomfloor is exclusive to noFloors, so is fine to pass in noFloors w/o -1
+			Person p = new Employee(idCounter, stat, noFloors);
+			addPerson(p);  // randomfloor is exclusive to noFloors, so is fine to pass in noFloors w/o -1
+			p.arrive(sim);
 		}
 	}
 
@@ -173,22 +121,6 @@ public class PersonHandler {
 		people.put(p.getID(), p);
 		idCounter++;
 	}
-
-	/**
-	 *
-	 */
-	private void setupPeopleEntry(Simulator sim) {
-		for (Integer pID : people.keySet()) {
-			people.get(pID).pressButton(sim);
-		}
-	}
-
-	/**
-	 *
-	 */
-	private void pressButton(Simulator sim, Person p) {
-		p.pressButton(sim);
-	}	
 
 	/**
 	 *
@@ -253,7 +185,7 @@ public class PersonHandler {
 		HashMap<Integer, Double> peopleAvgWaitTime = new HashMap<Integer, Double>();
 		
 		for (int pID : allPeople.keySet()) {
-			double avgWait = getPerson(pID).getAverageWaitingTime();
+			double avgWait = allPeople.get(pID).getAverageWaitingTime();
 			if(avgWait != -1) {  // if there is actual data to record
 				peopleAvgWaitTime.put(pID, avgWait);
 			}
@@ -265,4 +197,13 @@ public class PersonHandler {
 	public void addPersonForTest(Person p) {
 		people.put(p.getID(), p);
 	}
+
+	public void incrementComplaints() {
+		noComplaints++;
+	}
+
+	public Stats getStatsTest() {
+		return stat;
+	}
+
 }

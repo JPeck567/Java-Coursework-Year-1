@@ -16,11 +16,10 @@ public class Developer extends Person {
 	 *
 	 */
 	public Developer(int id, Stats stat, int noFloors) {
-		super(PersonHandler.DEFAULTWEIGHT, id);
-		this.destination = getRandomFloor(stat, (noFloors - 1) / 2, noFloors - 1);
+		super(stat, PersonHandler.DEFAULTWEIGHT, id, (noFloors - 1) / 2, noFloors - 1);
 		this.company = PersonHandler.COMPANIES[stat.getRandomRangeNum(0, 1)];
 	}
-
+	
 	/**
 	 *
 	 */

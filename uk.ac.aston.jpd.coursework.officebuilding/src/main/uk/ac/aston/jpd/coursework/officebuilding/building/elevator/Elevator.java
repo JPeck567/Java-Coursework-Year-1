@@ -31,15 +31,16 @@ import uk.ac.aston.jpd.coursework.officebuilding.person.handler.PersonHandler;
  * @since 2020 Coursework
  * 
  * 
- * @summary This Class stores attributes related to the elevator and methods which operate on the attributes and data based on the simulation 
- * at each tick
+ * @summary This Class stores attributes related to the elevator and methods
+ *          which operate on the attributes and data based on the simulation at
+ *          each tick
  */
 public class Elevator {
 
 	/**
 	 * Declaring Fields
 	 */
-	private String state;
+	private String doorState;
 	private final PList pList; // space to hold people to get in the elevator
 	private final Map<Integer, Boolean> requestsMap; // to know where people are to get in lift
 	private char direction;
@@ -55,7 +56,7 @@ public class Elevator {
 	public Elevator(PList list, int noFloors) {
 		direction = 'I'; // meaning idle and not moving anywhere
 		currentFloor = 0;
-		state = "close"; // initially closed. will change to open then ready then close.
+		doorState = "close"; // initially closed. will change to open then ready then close.
 
 		this.pList = list;
 		requestsMap = requestsListSetup(noFloors);
@@ -74,7 +75,7 @@ public class Elevator {
 	public void tick(Simulator sim, Building bld) {
 		Floor currentFloorObj = bld.getFloor(currentFloor);
 
-		if (checkStop(sim) || state.equals("open")) {
+		if (checkStop(sim) || doorState.equals("open")) {
 			openCloseMechanism(sim, currentFloorObj);
 		} else {
 			moveFloor();
@@ -93,14 +94,14 @@ public class Elevator {
 	 *                        elevator is on
 	 */
 	private void openCloseMechanism(Simulator sim, Floor currentFloorObj) {
-		if (state.equals("close")) { // stops movement and opens door
-			state = "open";
+		if (doorState.equals("close")) { // stops movement and opens door
+			doorState = "open";
 
 			offloadPeople(sim, currentFloorObj, pList.getOffload(sim, currentFloor)); // people in queue needing to go
 																						// out will do.
 			onloadPeople(sim, currentFloorObj);
-		} else if (state.equals("open")) { // closes door, finds new nearest dest and goes to it
-			state = "close";
+		} else if (doorState.equals("open")) { // closes door, finds new nearest dest and goes to it
+			doorState = "close";
 		}
 	}
 
@@ -309,13 +310,12 @@ public class Elevator {
 				Person p = sim.getPerson(pID);
 				removeFromElevator(sim, currentFloorObj, p);
 
-				if (p instanceof ArrivingPerson) {
-					ArrivingPerson arrP = (ArrivingPerson) p;
-					System.out.println();
-					if ((!arrP.getToExit())) {
-						arrP.setStartingTick(sim.getTick());
-					}
-				}
+//				if (p instanceof ArrivingPerson) {
+//					ArrivingPerson arrP = (ArrivingPerson) p;
+//					if ((!arrP.getToExit())) {
+//						arrP.setStartingTick(sim.getTick());
+//					}
+//				}
 			}
 		}
 	}
@@ -334,9 +334,9 @@ public class Elevator {
 			int waitingNum = currentFloorObj.getNumberWaiting(); // keeps track of people who have the capacity to get
 																	// on. if not (meaning rivalry or too big), will
 																	// decrement
-			// will only perform the onload operation if there is space on the elevator
-			// gets specified number of people from queue and adds it to current queue. gets
-			// indexes from 0 to the number of spaces on lift
+																	// will only perform the onload operation if there is space on the elevator
+																	// gets specified number of people from queue and adds it to current queue. gets
+																	// indexes from 0 to the number of spaces on lift
 
 			while (pList.getSpaces() > 0 && waitingNum > 0) {
 				Person p = sim.getPerson(currentFloorObj.peekWaitingPerson());
@@ -345,7 +345,8 @@ public class Elevator {
 					if (p instanceof Developer) { // checks if developer to move on
 						List<String> companies = pList.getOffloadCompanies(sim);
 						String devCompany = ((Developer) p).getCompany();
-						if (companies.size() != 0 && !companies.contains(devCompany)) { // if opposite company of
+						String rivalCompany = PersonHandler.COMPANIES[devCompany == PersonHandler.COMPANIES[0] ? 1: 0];  // if first company, rival is 2nd, else rival is 1st
+						if (companies.contains(rivalCompany)) { // if opposite company of
 																						// developer d is on lift, shift
 																						// d to back of queue
 							p.setTimeStamp(Simulator.getNewTimeStamp());
@@ -382,7 +383,7 @@ public class Elevator {
 	 */
 	private void addToElevator(Simulator sim, Floor currentFloorObj, Person p) {
 		pList.addPerson(p.getID());
-		p.addToElevator(sim.getTick());
+		p.moveOnElevator(sim.getTick());
 		currentFloorObj.pollWaitingPerson(); // removes given person
 	}
 
@@ -399,7 +400,7 @@ public class Elevator {
 	private void removeFromElevator(Simulator sim, Floor currentFloorObj, Person p) {
 		int pID = p.getID();
 		pList.removePerson(pList.indexOf(pID)); // removes from queue
-		p.setCurrentFloor(currentFloor);
+		p.moveOffElevator(sim.getTick());
 		currentFloorObj.addToFloor(pID);
 	}
 
@@ -447,40 +448,11 @@ public class Elevator {
 	}
 
 	/**
-	 * This method returns the current state of the elevator
+	 * This method returns the current state of the elevator's door
 	 * 
-	 * @return this returns a string specifying the state of the elevator
+	 * @return this returns a string representing the state of the door
 	 */
-	public String getState() {
-		return state;
+	public String getDoorState() {
+		return doorState;
 	}
-
-	/**
-	 * This is used for testing
-	 * 
-	 * @param pID person's id
-	 */
-	public void addPersonTest(int pID) { // for testing
-		pList.addPerson(pID);
-	}
-/**
- * This is used for testing
- * @param floor
- * indicates the floor number
- * @return
- * returns a boolean
- */
-	public boolean getRequestForTest(int floor) {
-		return requestsMap.get(floor);
-	}
-
-	/**
-	 * This is used for testing
-	 * @return
-	 * returns a direction
-	 */
-	public char getDirectionForTest() {
-		return direction;
-	}
-
 }

@@ -33,10 +33,11 @@ public class Simulator {
 	public final int noFloors; // are 7 floors. represented as 0 to 6 in the floor array of building
 	public final int maxCapacity;
 	public final static int DEFAULTFLOOR = 0;
-	
+
 	/**
 	 * Constructor that creates a simulator
-	 * @param this 
+	 * 
+	 * @param this
 	 * 
 	 * @param elevator The elevator within the building
 	 */
@@ -50,10 +51,10 @@ public class Simulator {
 	public void run(Interfacer interfacer) throws InterruptedException { // called by launcher
 		while (tick < SIMTIME) {
 			tick();
-			Thread.sleep(250); // 1000ms = 1 second. Therefore in real life, each tick execution is ~ 1 second
+			//Thread.sleep(250); // 1000ms = 1 second. Therefore in real life, each tick execution is ~ 1 second
 								// ( 1s + code execution time between loops)
 			interfacer.printSimulation(this, getTick(), getFloorsWaitingQueue(), getFloorsOnFloorList(),
-					getElevatorQueue().stream().map(pID -> getPerson(pID).toString()).collect(Collectors.toList()), 
+					getElevatorQueue().stream().map(pID -> getPerson(pID).toString()).collect(Collectors.toList()),
 					getElevatorState(), getElevatorCurrentFloor(), peopleHandler.getComplaints());
 		}
 		System.out.println(peopleHandler.getAvgWaitingTime().toString());
@@ -64,7 +65,7 @@ public class Simulator {
 	 */
 	private void tick() {
 		tick += 1;
-		
+
 		building.tick(this);
 		peopleHandler.tick(this);
 	}
@@ -79,15 +80,15 @@ public class Simulator {
 	public Person getPerson(int pID) {
 		return peopleHandler.getPerson(pID);
 	}
-	
+
 	public int getTick() {
 		return tick;
 	}
-	
+
 	public void addToOnFloor(int pID, int floorNo) {
 		building.getFloor(floorNo).addToFloor(pID);
 	}
-	
+
 	public int getNoFloors() {
 		return noFloors;
 	}
@@ -100,17 +101,17 @@ public class Simulator {
 		return building.getElevatorQueue();
 	}
 
-	public List<Queue<Integer>> getFloorsWaitingQueue() {  // gets all waiting queues and puts in list
+	public List<Queue<Integer>> getFloorsWaitingQueue() { // gets all waiting queues and puts in list
 		List<Queue<Integer>> queueList = new ArrayList<Queue<Integer>>();
-		for(int i = 0; i < noFloors; i++) {
+		for (int i = 0; i < noFloors; i++) {
 			queueList.add(getFloor(i).getWaitingQueue());
 		}
 		return queueList;
 	}
-	
-	public List<List<Integer>> getFloorsOnFloorList(){
+
+	public List<List<Integer>> getFloorsOnFloorList() {
 		List<List<Integer>> listList = new ArrayList<List<Integer>>();
-		for(int i = 0; i < noFloors; i++) {
+		for (int i = 0; i < noFloors; i++) {
 			listList.add(getFloor(i).getOnFloorList());
 		}
 		return listList;
@@ -119,7 +120,7 @@ public class Simulator {
 	public void removeFromFloor(int currentFloor, int pID) {
 		building.getFloor(currentFloor).removeFromOnFloor(pID);
 	}
-	
+
 	public void removeFromWaiting(int currentFloor, int pID) {
 		building.getFloor(currentFloor).removeFromWaiting(pID);
 	}
@@ -131,22 +132,8 @@ public class Simulator {
 	public String getElevatorState() {
 		return building.getElevatorState();
 	}
-	
+
 	public static long getNewTimeStamp() {
 		return System.nanoTime();
-	}
-	
-	
-
-	public Building getBuildingForTest() {  // for testing
-		return building;
-	}
-	
-	public PersonHandler getPersonHandlerForTest() {  // for testing
-		return peopleHandler;
-	}
-	
-	public Elevator getElevatorForTest() {  // for testing
-		return building.getElevatorForTest();
 	}
 }

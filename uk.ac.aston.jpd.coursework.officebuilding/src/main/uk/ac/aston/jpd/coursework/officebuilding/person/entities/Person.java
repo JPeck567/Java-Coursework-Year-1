@@ -15,9 +15,11 @@ public class Person {
 	 *
 	 */
 	private final int weight;
-	private final int id;
+	protected final int id;
 	protected int destination;
-	private int currentFloor;
+	protected final int destBoundL;
+	protected final int destBoundR;
+	protected int currentFloor;
 	protected boolean isWaiting;
 	private long timeStamp; // used for comparator to decide who is goes in front in queue. measured in nano seconds
 	private int waitingTick; // tick when person started waiting
@@ -26,23 +28,47 @@ public class Person {
 	/**
 	 *
 	 */
-	public Person(int weight, int id) {
+	public Person(Stats stat, int weight, int id, int destBoundL, int destBoundR) {
 		this.weight = weight;
 		this.id = id;
+		this.destBoundL = destBoundL;
+		this.destBoundR = destBoundR;
 		this.currentFloor = Simulator.DEFAULTFLOOR;
 		this.waitTimeList = new ArrayList<Integer>();
+		this.destination = getRandomFloor(stat);
 	}
 	
-	public void tick() {
+	public void tick(Simulator sim, PersonHandler pHandle, Stats stat) {
+		if(decideToChangeFloor(stat)) {
+			changeFloor(sim, getRandomFloor(stat));
+		}
 	}
 	
-	public int getRandomFloor(Stats stat, int boundL, int boundR) {
-		while (true) {
-			int randFloor = stat.getRandomRangeNum(boundL, boundR); // keeps trying for a random floor until it isn't the current floor of the person
-			if (randFloor != currentFloor) {
-				return randFloor;
+	public boolean decideToChangeFloor(Stats stat) {
+		if(currentFloor != -1 && !isWaiting) {
+			return stat.getDecisionProb();
+		}
+		return false;
+	}
+	
+	public void changeFloor(Simulator sim, int newDest) {
+		destination = newDest;
+		sim.removeFromFloor(currentFloor, id);
+		pressButton(sim);
+	}
+	
+	protected int getRandomFloor(Stats stat) {
+		if(destBoundL == destBoundR) {
+			return destBoundL;
+		} else {
+			while (true) {
+				int randFloor = stat.getRandomRangeNum(destBoundL, destBoundR); // keeps trying for a random floor until it isn't the current floor of the person
+				if (randFloor != currentFloor) {
+					return randFloor;
+				}
 			}
 		}
+		
 	}
 
 	/**
@@ -92,8 +118,12 @@ public class Person {
 		} else {  // current floor same as dest
 			addSelfToFloor(sim);
 		}
-
 	}
+	
+	public void arrive(Simulator sim) {
+		pressButton(sim);
+	}
+	
 
 	protected void addSelfToFloor(Simulator sim) {
 		sim.addToOnFloor(id, Simulator.DEFAULTFLOOR);
@@ -111,15 +141,6 @@ public class Person {
 	 */
 	public void setIsWaiting(boolean waiting) {
 		isWaiting = waiting;
-	}
-
-	/**
-	 *
-	 */
-	public void addToElevator(int currentTick) {
-		isWaiting = false;
-		currentFloor = -1; // sets person to travelling state which is -1 (meaning on elevator)
-		waitTimeList.add(currentTick - waitingTick);
 	}
 
 	/**
@@ -166,5 +187,19 @@ public class Person {
 			return average / waitTimeList.size();
 		}
 		return -1;
+	}
+
+	public void moveOffElevator(int currentTick) {
+		currentFloor = destination;
+	}
+
+	public void moveOnElevator(int currentTick) {
+		isWaiting = false;
+		currentFloor = -1; // sets person to travelling state which is -1 (meaning on elevator)
+		waitTimeList.add(currentTick - waitingTick);
+	}
+	
+	public void setDestinationForTest(int dest) {
+		destination = dest;
 	}
 }

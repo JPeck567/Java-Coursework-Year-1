@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import org.junit.Test;
+
 import java.lang.Thread;
 import java.time.Instant;
 
@@ -22,5 +25,7 @@ import uk.ac.aston.jpd.coursework.officebuilding.person.entities.Person;
  *
  */
 public class SimulatorTest {
-
+	@Test
+	public void wholeSystemTest() {
+	}
 }
