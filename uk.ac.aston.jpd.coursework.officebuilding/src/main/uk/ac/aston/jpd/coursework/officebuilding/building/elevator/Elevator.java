@@ -323,8 +323,10 @@ public class Elevator {
 			int waitingNum = currentFloorObj.getNumberWaiting(); // keeps track of people who have the capacity to get
 																	// on. if not (meaning rivalry or too big), will
 																	// decrement
-																	// will only perform the onload operation if there is space on the elevator
-																	// gets specified number of people from queue and adds it to current queue. gets
+																	// will only perform the onload operation if there
+																	// is space on the elevator
+																	// gets specified number of people from queue and
+																	// adds it to current queue. gets
 																	// indexes from 0 to the number of spaces on lift
 
 			while (pList.getSpaces() > 0 && waitingNum > 0) {
@@ -334,10 +336,19 @@ public class Elevator {
 					if (p instanceof Developer) { // checks if developer to move on
 						List<String> companies = pList.getOffloadCompanies(sim);
 						String devCompany = ((Developer) p).getCompany();
-						String rivalCompany = PersonHandler.COMPANIES[devCompany == PersonHandler.COMPANIES[0] ? 1: 0];  // if first company, rival is 2nd, else rival is 1st
+						String rivalCompany = PersonHandler.COMPANIES[devCompany == PersonHandler.COMPANIES[0] ? 1 : 0]; // if
+																															// first
+																															// company,
+																															// rival
+																															// is
+																															// 2nd,
+																															// else
+																															// rival
+																															// is
+																															// 1st
 						if (companies.contains(rivalCompany)) { // if opposite company of
-																						// developer d is on lift, shift
-																						// d to back of queue
+																// developer d is on lift, shift
+																// d to back of queue
 							p.setTimeStamp(Simulator.getNewTimeStamp());
 							currentFloorObj.moveFrontToBack();
 							waitingNum--;

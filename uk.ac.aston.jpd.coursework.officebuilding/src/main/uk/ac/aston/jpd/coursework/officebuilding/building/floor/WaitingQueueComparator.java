@@ -43,9 +43,9 @@ public class WaitingQueueComparator implements Comparator<Integer> {
 	 * 
 	 * @param pID1 this is the id of the first person
 	 * @param pID2 this is the id of the second person
-	 * @return this returns -1 if the first person needs to be in front of the second person.
-	 *  returns 1 if the second person needs to be in front of the first person.
-	 *  returns 0 if both people are the same.
+	 * @return this returns -1 if the first person needs to be in front of the
+	 *         second person. returns 1 if the second person needs to be in front of
+	 *         the first person. returns 0 if both people are the same.
 	 */
 	public int compare(Integer pID1, Integer pID2) {
 		Person p1 = sim.getPerson(pID1);

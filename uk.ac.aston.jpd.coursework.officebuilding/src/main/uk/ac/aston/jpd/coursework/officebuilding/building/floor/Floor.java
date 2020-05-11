@@ -30,8 +30,8 @@ public class Floor {
 	 */
 	private final int FLOORNO;
 	// button and tell lift to stop when it next comes. button press occures after
-							// two ticks (one to close door, one after lift moves away), meaning values is
-							// at 3
+	// two ticks (one to close door, one after lift moves away), meaning values is
+	// at 3
 	private final Queue<Integer> waitingQueue;
 	private final List<Integer> onFloor;
 	private int toPress; // a toggle, in the case lift is full + people still waiting, will re press
@@ -180,9 +180,9 @@ public class Floor {
 			addToWaiting(pID);
 		}
 
-		if(toPress == 0) {  // if there isn't the need for a rerequest
+		if (toPress == 0) { // if there isn't the need for a rerequest
 			e.addRequest(FLOORNO); // tells elevator people are waiting
-		}	
+		}
 	}
 
 	/**

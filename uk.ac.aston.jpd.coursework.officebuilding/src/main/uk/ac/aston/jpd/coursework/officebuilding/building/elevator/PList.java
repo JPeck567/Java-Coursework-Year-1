@@ -74,28 +74,24 @@ public class PList {
 	 * This method returns a list of the companies of developers the elevator holds
 	 * if there are developers on board
 	 * 
-	 * @param sim 
-	 * this is used to interface with the people handler class
-	 * @return
-	 * this returns a list of what companies are on board
+	 * @param sim this is used to interface with the people handler class
+	 * @return this returns a list of what companies are on board
 	 */
-	public List<String> getOffloadCompanies(Simulator sim) { 
+	public List<String> getOffloadCompanies(Simulator sim) {
 		return list.stream().map(pID -> sim.getPerson(pID)).filter(p -> (p instanceof Developer))
 				.map(p -> ((Developer) p).getCompany()).distinct().collect(Collectors.toList());
 	}
 
-	/** 
-	 * This method returns the closest floor up from the current floor, by checking each person in the list for their destination.
+	/**
+	 * This method returns the closest floor up from the current floor, by checking
+	 * each person in the list for their destination.
 	 * 
-	 * @param sim
-	 * this is used to interface with the people handler class
-	 * @param currentFloor
-	 * this indicated the current floor of the elevator
-	 * @return
-	 * If there is a floor upwards to go to, return it. If not, return -1
+	 * @param sim          this is used to interface with the people handler class
+	 * @param currentFloor this indicated the current floor of the elevator
+	 * @return If there is a floor upwards to go to, return it. If not, return -1
 	 */
 	public int getNextUpFloor(Simulator sim, int currentFloor) {
-																	// to signal no floor
+		// to signal no floor
 		int nextFloor = sim.getNoFloors();
 
 		for (int pID : list) { // for each person id
@@ -116,18 +112,16 @@ public class PList {
 		// using method reference. if none exists, return -1
 	}
 
-	/** 
-	 *  
-	 * This method returns the closest floor down from the current floor, by checking each person in the list for their destination.
+	/**
 	 * 
-	 * @param sim
-	 * this is used to interface with the people handler class
-	 * @param currentFloor
-	 * this indicated the current floor of the elevator
-	 * @return
-	 * If there is a floor downwards to go to, return it. If not, return -1
+	 * This method returns the closest floor down from the current floor, by
+	 * checking each person in the list for their destination.
+	 * 
+	 * @param sim          this is used to interface with the people handler class
+	 * @param currentFloor this indicated the current floor of the elevator
+	 * @return If there is a floor downwards to go to, return it. If not, return -1
 	 */
-	
+
 	public int getNextDownFloor(Simulator sim, int currentFloor) {
 		int nextFloor = -1;
 
@@ -147,31 +141,30 @@ public class PList {
 	// sim.getPerson(pID).getDestination()).filter(floor -> floor > currentFloor)
 	// .min(Integer::compare).orElse(-1);
 
-	/** 
+	/**
 	 * This method returns the remaining spaces in the list
-	 * @return
-	 * this returns the number of leftover spaces in the list
+	 * 
+	 * @return this returns the number of leftover spaces in the list
 	 */
 	public int getSpaces() {
 		return SIZE - list.size();
 	}
 
-	/** 
+	/**
 	 * This method returns a copy of the content of the list
-	 * @return
-	 * this returns a new list with the copied content
+	 * 
+	 * @return this returns a new list with the copied content
 	 */
-	
+
 	public List<Integer> getList() {
 		return new ArrayList<Integer>(list);
 	}
 
-	/** 
+	/**
 	 * This method returns position of the given id in the list
-	 * @param pID
-	 * this indicates the given id which is inside the list
-	 * @return
-	 * this returns the index of the person's id in the list
+	 * 
+	 * @param pID this indicates the given id which is inside the list
+	 * @return this returns the index of the person's id in the list
 	 */
 
 	public int indexOf(int pID) {

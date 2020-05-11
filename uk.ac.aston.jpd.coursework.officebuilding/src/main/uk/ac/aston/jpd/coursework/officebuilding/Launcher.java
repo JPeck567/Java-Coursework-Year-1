@@ -41,8 +41,9 @@ public class Launcher {
 	/**
 	 * This main method creates a new launcher
 	 * 
-	 * @param args
-	 * @throws InterruptedException
+	 * @param args parameter is unused
+	 * @throws InterruptedException This method throws and interrupted exception if
+	 *                              the program is interrupted
 	 */
 	public static void main(String args[]) throws InterruptedException {
 		Launcher l = new Launcher();
