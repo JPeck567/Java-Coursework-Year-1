@@ -2,14 +2,10 @@ package uk.ac.aston.jpd.coursework.officebuilding.building.floor;
 
 import static org.junit.Assert.assertTrue;
 
-import java.util.Comparator;
-
 import org.junit.Test;
 
 import uk.ac.aston.jpd.coursework.officebuilding.TestResources;
-import uk.ac.aston.jpd.coursework.officebuilding.person.entities.Client;
 import uk.ac.aston.jpd.coursework.officebuilding.person.entities.Person;
-import uk.ac.aston.jpd.coursework.officebuilding.simulator.Simulator;
 
 public class WaitingQueueComparatorTest extends TestResources {
 	private WaitingQueueComparator c;

@@ -14,13 +14,13 @@ public class Person {
 	/**
 	 *
 	 */
-	private final int weight;
 	protected final int id;
-	protected int destination;
 	protected final int destBoundL;
 	protected final int destBoundR;
+	protected int destination;
 	protected int currentFloor;
 	protected boolean isWaiting;
+	private final int weight;
 	private long timeStamp; // used for comparator to decide who is goes in front in queue. measured in nano seconds
 	private int waitingTick; // tick when person started waiting
 	private List<Integer> waitTimeList; // in ticks
@@ -44,14 +44,14 @@ public class Person {
 		}
 	}
 	
-	public boolean decideToChangeFloor(Stats stat) {
+	private boolean decideToChangeFloor(Stats stat) {
 		if(currentFloor != -1 && !isWaiting) {
 			return stat.getDecisionProb();
 		}
 		return false;
 	}
 	
-	public void changeFloor(Simulator sim, int newDest) {
+	protected void changeFloor(Simulator sim, int newDest) {
 		destination = newDest;
 		sim.removeFromFloor(currentFloor, id);
 		pressButton(sim);

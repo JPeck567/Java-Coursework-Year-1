@@ -1,21 +1,11 @@
 package uk.ac.aston.jpd.coursework.officebuilding.building.elevator;
 
-import java.util.ArrayList;
-
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
-import java.util.OptionalInt;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import uk.ac.aston.jpd.coursework.officebuilding.building.Building;
 import uk.ac.aston.jpd.coursework.officebuilding.building.floor.Floor;
 import uk.ac.aston.jpd.coursework.officebuilding.simulator.Simulator;
-import uk.ac.aston.jpd.coursework.officebuilding.person.entities.ArrivingPerson;
 import uk.ac.aston.jpd.coursework.officebuilding.person.entities.Developer;
 import uk.ac.aston.jpd.coursework.officebuilding.person.entities.Person;
 import uk.ac.aston.jpd.coursework.officebuilding.person.handler.PersonHandler;
@@ -36,13 +26,12 @@ import uk.ac.aston.jpd.coursework.officebuilding.person.handler.PersonHandler;
  *          each tick
  */
 public class Elevator {
-
-	private final PList pList; // space to hold people to get in the elevator
-	private final Map<Integer, Boolean> requestsMap; // to know where people are to get in lift
-	private char direction;
 	/**
 	 * Declaring Fields
 	 */
+	private final PList pList; // space to hold people to get in the elevator
+	private final Map<Integer, Boolean> requestsMap; // to know where people are to get in lift
+	private char direction;
 	private String doorState;
 	private int currentFloor;
 

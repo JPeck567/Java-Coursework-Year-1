@@ -6,7 +6,6 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 import uk.ac.aston.jpd.coursework.officebuilding.TestResources;
-import uk.ac.aston.jpd.coursework.officebuilding.person.handler.PersonHandler;
 
 public class ClientTest extends TestResources {
 	public ClientTest() {

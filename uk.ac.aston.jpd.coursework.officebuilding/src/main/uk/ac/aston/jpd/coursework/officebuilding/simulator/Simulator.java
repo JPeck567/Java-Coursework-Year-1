@@ -1,17 +1,11 @@
 package uk.ac.aston.jpd.coursework.officebuilding.simulator;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.stream.Collectors;
-import java.lang.Thread;
-import java.time.Instant;
-
 import uk.ac.aston.jpd.coursework.officebuilding.person.handler.PersonHandler;
 import uk.ac.aston.jpd.coursework.officebuilding.building.Building;
-import uk.ac.aston.jpd.coursework.officebuilding.building.Button;
 import uk.ac.aston.jpd.coursework.officebuilding.building.elevator.Elevator;
 import uk.ac.aston.jpd.coursework.officebuilding.building.elevator.PList;
 import uk.ac.aston.jpd.coursework.officebuilding.building.floor.Floor;
@@ -26,14 +20,13 @@ import uk.ac.aston.jpd.coursework.officebuilding.person.entities.Person;
  */
 public class Simulator {
 
-	private int tick;
 	private static final int SIMTIME = 2880; // 8hrs = 2880 ticks (as each tick is 10s)
 	private final PersonHandler peopleHandler;
 	private final Building building;
+	private int tick;
+	public static final int DEFAULTFLOOR = 0;
 	public final int noFloors; // are 7 floors. represented as 0 to 6 in the floor array of building
 	public final int maxCapacity;
-	public final static int DEFAULTFLOOR = 0;
-
 	/**
 	 * Constructor that creates a simulator
 	 * 
@@ -77,6 +70,10 @@ public class Simulator {
 		return new Elevator(new PList(maxCapacity), noFloors);
 	}
 
+	public static long getNewTimeStamp() {
+		return System.nanoTime();
+	}
+
 	public Person getPerson(int pID) {
 		return peopleHandler.getPerson(pID);
 	}
@@ -87,6 +84,14 @@ public class Simulator {
 
 	public void addToOnFloor(int pID, int floorNo) {
 		building.getFloor(floorNo).addToFloor(pID);
+	}
+
+	public void removeFromFloor(int currentFloor, int pID) {
+		building.getFloor(currentFloor).removeFromOnFloor(pID);
+	}
+
+	public void removeFromWaiting(int currentFloor, int pID) {
+		building.getFloor(currentFloor).removeFromWaiting(pID);
 	}
 
 	public int getNoFloors() {
@@ -117,23 +122,11 @@ public class Simulator {
 		return listList;
 	}
 
-	public void removeFromFloor(int currentFloor, int pID) {
-		building.getFloor(currentFloor).removeFromOnFloor(pID);
-	}
-
-	public void removeFromWaiting(int currentFloor, int pID) {
-		building.getFloor(currentFloor).removeFromWaiting(pID);
-	}
-
 	public int getElevatorCurrentFloor() {
 		return building.getElevatorCurrentFloor();
 	}
 
 	public String getElevatorState() {
 		return building.getElevatorState();
-	}
-
-	public static long getNewTimeStamp() {
-		return System.nanoTime();
 	}
 }

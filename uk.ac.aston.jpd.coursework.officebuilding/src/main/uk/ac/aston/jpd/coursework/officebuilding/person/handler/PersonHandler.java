@@ -2,13 +2,8 @@ package uk.ac.aston.jpd.coursework.officebuilding.person.handler;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
-
 import uk.ac.aston.jpd.coursework.officebuilding.person.entities.ArrivingPerson;
 import uk.ac.aston.jpd.coursework.officebuilding.person.entities.Client;
 import uk.ac.aston.jpd.coursework.officebuilding.person.entities.Developer;
@@ -66,6 +61,23 @@ public class PersonHandler {
 	/**
 	 *
 	 */
+	private void generatePeople(Simulator sim, int empNo, int devNo, int noFloors) {
+		while (idCounter < devNo) { // creates developers and maps them to an id. also has a random company from static array
+			Person p = new Developer(idCounter, stat, noFloors);
+			addPerson(p);
+			p.arrive(sim);
+		}
+	
+		while (idCounter < devNo + empNo) { // creates employers and maps them to an id. the first emp's id is the next one from the last dev's id
+			Person p = new Employee(idCounter, stat, noFloors);
+			addPerson(p);  // randomfloor is exclusive to noFloors, so is fine to pass in noFloors w/o -1
+			p.arrive(sim);
+		}
+	}
+
+	/**
+	 *
+	 */
 	private void randomArrivalTick(Simulator sim) {
 		int noFloors = sim.getNoFloors();
 
@@ -82,10 +94,14 @@ public class PersonHandler {
 		}
 	}
 
-	public void addToRemove(int pID) {
-		toRemove.add(pID);
+	/**
+	 *
+	 */
+	private void addPerson(Person p) {
+		people.put(p.getID(), p);
+		idCounter++;
 	}
-	
+
 	/**
 	 *
 	 */
@@ -100,26 +116,12 @@ public class PersonHandler {
 	/**
 	 *
 	 */
-	private void generatePeople(Simulator sim, int empNo, int devNo, int noFloors) {
-		while (idCounter < devNo) { // creates developers and maps them to an id. also has a random company from static array
-			Person p = new Developer(idCounter, stat, noFloors);
-			addPerson(p);
-			p.arrive(sim);
-		}
-
-		while (idCounter < devNo + empNo) { // creates employers and maps them to an id. the first emp's id is the next one from the last dev's id
-			Person p = new Employee(idCounter, stat, noFloors);
-			addPerson(p);  // randomfloor is exclusive to noFloors, so is fine to pass in noFloors w/o -1
-			p.arrive(sim);
-		}
+	private void removePerson(int pID) {
+		people.remove(pID);
 	}
 
-	/**
-	 *
-	 */
-	private void addPerson(Person p) {
-		people.put(p.getID(), p);
-		idCounter++;
+	public void addToRemove(int pID) {
+		toRemove.add(pID);
 	}
 
 	/**
@@ -129,13 +131,6 @@ public class PersonHandler {
 		return people.get(pID);
 	}
 
-	/**
-	 *
-	 */
-	public void removePerson(int pID) {
-		people.remove(pID);
-	}
-	
 	/**
 	 *
 	 */

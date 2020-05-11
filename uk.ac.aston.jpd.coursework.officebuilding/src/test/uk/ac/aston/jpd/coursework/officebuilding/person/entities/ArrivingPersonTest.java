@@ -2,14 +2,9 @@ package uk.ac.aston.jpd.coursework.officebuilding.person.entities;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-
 import org.junit.Test;
-
 import uk.ac.aston.jpd.coursework.officebuilding.TestResources;
-import uk.ac.aston.jpd.coursework.officebuilding.person.handler.PersonHandler;
+
 
 public class ArrivingPersonTest extends TestResources{
 	public ArrivingPersonTest() {

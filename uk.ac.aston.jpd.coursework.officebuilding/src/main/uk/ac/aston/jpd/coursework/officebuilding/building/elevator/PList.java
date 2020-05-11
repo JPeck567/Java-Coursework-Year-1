@@ -1,19 +1,10 @@
 package uk.ac.aston.jpd.coursework.officebuilding.building.elevator;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Optional;
-import java.util.OptionalInt;
-import java.util.Queue;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import uk.ac.aston.jpd.coursework.officebuilding.person.entities.Developer;
-import uk.ac.aston.jpd.coursework.officebuilding.person.entities.Person;
 import uk.ac.aston.jpd.coursework.officebuilding.simulator.Simulator;
 
 /**
@@ -49,21 +40,21 @@ public class PList {
 	}
 
 	/**
-	 * This method removes the id value given by the index
-	 * 
-	 * @param index this indicates the index of the person id to be removed
-	 */
-	public void removePerson(int index) {
-		list.remove(index);
-	}
-
-	/**
 	 * This method adds the id value to the list
 	 * 
 	 * @param pID this indicates the person id to be added
 	 */
 	public void addPerson(int pID) {
 		list.add(pID);
+	}
+
+	/**
+	 * This method removes the id value given by the index
+	 * 
+	 * @param index this indicates the index of the person id to be removed
+	 */
+	public void removePerson(int index) {
+		list.remove(index);
 	}
 
 	/**

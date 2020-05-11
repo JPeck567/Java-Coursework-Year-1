@@ -1,6 +1,5 @@
 package uk.ac.aston.jpd.coursework.officebuilding.interfacer;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.io.ByteArrayOutputStream;
@@ -8,21 +7,11 @@ import java.io.PrintStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Collection;
-import java.util.List;
 import java.util.Scanner;
-import java.util.stream.Collectors;
-
 import org.junit.Test;
-
-import uk.ac.aston.jpd.coursework.officebuilding.Launcher;
-import uk.ac.aston.jpd.coursework.officebuilding.TestResources;
-import uk.ac.aston.jpd.coursework.officebuilding.building.floor.Floor;
-import uk.ac.aston.jpd.coursework.officebuilding.simulator.Simulator;
 
 public class InterfacerTest {
 	private Interfacer i;
-	private Scanner sc;
 
 	public InterfacerTest() {
 		i = new Interfacer();

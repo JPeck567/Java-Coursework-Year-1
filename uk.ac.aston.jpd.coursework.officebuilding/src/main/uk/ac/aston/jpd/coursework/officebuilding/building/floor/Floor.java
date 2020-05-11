@@ -1,16 +1,12 @@
 package uk.ac.aston.jpd.coursework.officebuilding.building.floor;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 import java.util.PriorityQueue;
 
-import uk.ac.aston.jpd.coursework.officebuilding.building.Building;
 import uk.ac.aston.jpd.coursework.officebuilding.building.Button;
 import uk.ac.aston.jpd.coursework.officebuilding.building.elevator.Elevator;
-import uk.ac.aston.jpd.coursework.officebuilding.building.elevator.PList;
-import uk.ac.aston.jpd.coursework.officebuilding.simulator.Simulator;
 
 /**
  * 
@@ -33,16 +29,16 @@ public class Floor {
 	 * Declaring Fields
 	 */
 	private final int FLOORNO;
-	private int toPress; // a toggle, in the case lift is full + people still waiting, will re press
-							// button and tell lift to stop when it next comes. button press occures after
+	// button and tell lift to stop when it next comes. button press occures after
 							// two ticks (one to close door, one after lift moves away), meaning values is
 							// at 3
 	private final Queue<Integer> waitingQueue;
 	private final List<Integer> onFloor;
+	private int toPress; // a toggle, in the case lift is full + people still waiting, will re press
 	public final Button button;
 
 	/**
-	 * c This is the constructing method to create a button object as well as the a
+	 * This is the constructing method to create a button object as well as the a
 	 * list for the people on the floor, and a priority queue for people who are
 	 * waiting
 	 * 
@@ -159,7 +155,7 @@ public class Floor {
 	 * @param e this is the elevator object used to tell it that there are people
 	 *          waiting
 	 */
-	public void reRequestCheck(Elevator e) {
+	private void reRequestCheck(Elevator e) {
 		if (toPress > 0) { // is an occasion where needs to re-request lift after 2 ticks (once to close
 			// door, once so it can move away)
 			if (toPress >= 3) { // toPress begins at 1, therefore is 3 (1 + 2 ticks)

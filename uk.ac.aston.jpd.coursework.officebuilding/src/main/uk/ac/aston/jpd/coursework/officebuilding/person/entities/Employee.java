@@ -1,7 +1,6 @@
 package uk.ac.aston.jpd.coursework.officebuilding.person.entities;
 
 import uk.ac.aston.jpd.coursework.officebuilding.person.handler.PersonHandler;
-import uk.ac.aston.jpd.coursework.officebuilding.simulator.Simulator;
 import uk.ac.aston.jpd.coursework.officebuilding.stats.Stats;
 
 /**

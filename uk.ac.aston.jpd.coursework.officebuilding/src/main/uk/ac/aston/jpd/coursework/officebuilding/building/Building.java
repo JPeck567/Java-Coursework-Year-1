@@ -15,8 +15,6 @@ import uk.ac.aston.jpd.coursework.officebuilding.building.floor.Floor;
 import uk.ac.aston.jpd.coursework.officebuilding.building.floor.WaitingQueueComparator;
 import uk.ac.aston.jpd.coursework.officebuilding.simulator.Simulator;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 /**

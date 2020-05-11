@@ -3,24 +3,13 @@ package uk.ac.aston.jpd.coursework.officebuilding.building.floor;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
-import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 
-import java.util.PriorityQueue;
-
 import uk.ac.aston.jpd.coursework.officebuilding.TestResources;
-import uk.ac.aston.jpd.coursework.officebuilding.building.Building;
-import uk.ac.aston.jpd.coursework.officebuilding.building.Button;
-import uk.ac.aston.jpd.coursework.officebuilding.building.elevator.Elevator;
-import uk.ac.aston.jpd.coursework.officebuilding.building.elevator.PList;
 import uk.ac.aston.jpd.coursework.officebuilding.person.entities.Person;
-import uk.ac.aston.jpd.coursework.officebuilding.simulator.Simulator;
 
 public class FloorTest extends TestResources {
 	public FloorTest() {

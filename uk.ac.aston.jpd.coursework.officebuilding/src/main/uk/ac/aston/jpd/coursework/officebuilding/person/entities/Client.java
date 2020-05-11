@@ -44,7 +44,7 @@ public class Client extends ArrivingPerson {
 	 *
 	 */
 	@Override
-	public void leaveFloor(Simulator sim, PersonHandler pHandle) {
+	protected void leaveFloor(Simulator sim, PersonHandler pHandle) {
 		if(startingTick == PersonHandler.DEFAULTSTARTINGTICK) {
 			pHandle.addToRemove(id);
 		}

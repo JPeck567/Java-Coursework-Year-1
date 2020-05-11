@@ -93,7 +93,7 @@ public class ArrivingPerson extends Person {
 	 * @param sim     this is used the interfacer of the floor object
 	 * @param pHandle this is used to remove the person id from the person map
 	 */
-	public void leaveFloor(Simulator sim, PersonHandler pHandle) {
+	protected void leaveFloor(Simulator sim, PersonHandler pHandle) {
 		sim.removeFromFloor(currentFloor, id);
 		pHandle.addToRemove(id);
 	}
