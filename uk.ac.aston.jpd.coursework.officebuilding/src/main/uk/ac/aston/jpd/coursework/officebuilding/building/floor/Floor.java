@@ -184,8 +184,9 @@ public class Floor {
 			addToWaiting(pID);
 		}
 
-		e.addRequest(FLOORNO); // tells elevator people are waiting
-
+		if(toPress == 0) {  // if there isn't the need for a rerequest
+			e.addRequest(FLOORNO); // tells elevator people are waiting
+		}	
 	}
 
 	/**

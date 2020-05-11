@@ -38,10 +38,6 @@ public class Stats {
 		return arrSim.getProbCli(rnd.nextDouble());
 	}
 
-	public int getRandomFloor(int noFloors) { // 0 to noFloors(exclusive). this is fine as we count floor 0 as a floor
-		return rnd.nextInt(noFloors);
-	}
-
 	public int getRandomRangeNum(int boundL, int boundR) { // generates rand num from 0 to boundR.
 		return rnd.nextInt(boundR - boundL + 1) + boundL; // rand num between 0 and range(diff of l to r) and then + boundL, therefore moving range of nums into correct range given in parameters
 	}

@@ -132,20 +132,6 @@ public class Person {
 	/**
 	 *
 	 */
-	public boolean isWaiting() {
-		return isWaiting;
-	}
-
-	/**
-	 *
-	 */
-	public void setIsWaiting(boolean waiting) {
-		isWaiting = waiting;
-	}
-
-	/**
-	 *
-	 */
 	public int getID() {
 		return id;
 	}
@@ -197,9 +183,5 @@ public class Person {
 		isWaiting = false;
 		currentFloor = -1; // sets person to travelling state which is -1 (meaning on elevator)
 		waitTimeList.add(currentTick - waitingTick);
-	}
-	
-	public void setDestinationForTest(int dest) {
-		destination = dest;
 	}
 }

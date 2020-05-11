@@ -37,13 +37,13 @@ import uk.ac.aston.jpd.coursework.officebuilding.person.handler.PersonHandler;
  */
 public class Elevator {
 
+	private final PList pList; // space to hold people to get in the elevator
+	private final Map<Integer, Boolean> requestsMap; // to know where people are to get in lift
+	private char direction;
 	/**
 	 * Declaring Fields
 	 */
 	private String doorState;
-	private final PList pList; // space to hold people to get in the elevator
-	private final Map<Integer, Boolean> requestsMap; // to know where people are to get in lift
-	private char direction;
 	private int currentFloor;
 
 	/**

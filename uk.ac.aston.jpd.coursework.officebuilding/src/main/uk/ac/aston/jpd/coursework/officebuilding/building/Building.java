@@ -59,19 +59,6 @@ public class Building {
 	}
 
 	/**
-	 * Tick method calls tick for the floors and elevator
-	 * 
-	 * @param sim elevator uses simulator as part of it's functions
-	 * 
-	 */
-	public void tick(Simulator sim) {
-		for (Floor f : floors) {
-			f.tick(elevator);
-		}
-		elevator.tick(sim, this);
-	}
-
-	/**
 	 * This method generate floors passing in the simulator and a button object for
 	 * the constructor of floor.
 	 * 
@@ -84,6 +71,19 @@ public class Building {
 		for (int i = 0; i < noFloors; i++) {
 			floors[i] = new Floor(i, new Button(i), c);
 		}
+	}
+
+	/**
+	 * Tick method calls tick for the floors and elevator
+	 * 
+	 * @param sim elevator uses simulator as part of it's functions
+	 * 
+	 */
+	public void tick(Simulator sim) {
+		for (Floor f : floors) {
+			f.tick(elevator);
+		}
+		elevator.tick(sim, this);
 	}
 
 	/**

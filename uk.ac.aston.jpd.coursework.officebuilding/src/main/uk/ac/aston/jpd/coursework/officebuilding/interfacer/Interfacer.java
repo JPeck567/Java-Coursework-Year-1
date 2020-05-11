@@ -3,6 +3,7 @@ package uk.ac.aston.jpd.coursework.officebuilding.interfacer;
 import java.util.Collection;
 import java.util.InputMismatchException;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Queue;
 import java.util.Scanner;
 import java.util.stream.Collectors;
@@ -98,7 +99,7 @@ public class Interfacer {
 	 */
 	public int readInt() {
 		while (!sc.hasNextInt()) {
-			System.out.println("Value must be an integer: ");
+			System.out.print("Value must be an integer! Try again: ");
 			sc.nextLine();
 		}
 		return sc.nextInt();
@@ -112,7 +113,7 @@ public class Interfacer {
 	 */
 	public double readDouble() {
 		while (!sc.hasNextDouble()) {
-			System.out.println("Value must be a double: ");
+			System.out.println("Value must be a double! Try again: ");
 			sc.nextLine();
 		}
 

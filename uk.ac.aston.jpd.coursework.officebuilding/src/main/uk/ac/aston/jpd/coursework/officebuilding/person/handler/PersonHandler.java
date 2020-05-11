@@ -125,38 +125,6 @@ public class PersonHandler {
 	/**
 	 *
 	 */
-	private int getRandomDevFloor(int currentFloor, int noFloors) {
-		noFloors--;  // as is +1 too high for random funct, which treats boundR inclusive. as floor G as 0, not 1, noFloors needs -1
-		while (true) {
-			int randFloor = stat.getRandomRangeNum(noFloors / 2, noFloors); // keeps trying for a random floor until it isn't the current floor of the person
-			if (randFloor != currentFloor) {
-				return randFloor;
-			}
-		}
-	}
-
-	/**
-	 *
-	 */
-	private int getRandomEmpFloor(int currentFloor, int noFloors) {
-		while (true) {
-			int randFloor = stat.getRandomFloor(noFloors); // keeps trying for a random floor until it isn't the current floor of the person
-			if (randFloor != currentFloor) {
-				return randFloor;
-			}
-		}
-	}
-
-	/**
-	 *
-	 */
-	public int getRandomCliFloor(int noFloors) {
-		return stat.getRandomRangeNum(0, ((noFloors - 1) / 2));
-	}
-
-	/**
-	 *
-	 */
 	public Person getPerson(int pID) {
 		return people.get(pID);
 	}
@@ -194,16 +162,7 @@ public class PersonHandler {
 		return peopleAvgWaitTime;
 	}
 	
-	public void addPersonForTest(Person p) {
-		people.put(p.getID(), p);
-	}
-
 	public void incrementComplaints() {
 		noComplaints++;
 	}
-
-	public Stats getStatsTest() {
-		return stat;
-	}
-
 }

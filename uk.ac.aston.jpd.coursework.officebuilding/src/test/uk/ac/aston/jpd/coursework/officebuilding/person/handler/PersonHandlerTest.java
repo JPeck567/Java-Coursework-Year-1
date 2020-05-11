@@ -22,8 +22,8 @@ import uk.ac.aston.jpd.coursework.officebuilding.simulator.Simulator;
 import uk.ac.aston.jpd.coursework.officebuilding.stats.Stats;
 
 public class PersonHandlerTest {
-	@Before
-	public void setup() {
+	public PersonHandlerTest() {
+		
 	}
 	
 	@Test
