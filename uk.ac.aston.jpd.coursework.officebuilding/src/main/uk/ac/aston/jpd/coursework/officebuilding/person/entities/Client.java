@@ -11,7 +11,7 @@ public class Client extends ArrivingPerson {
 	 * Declaring fields
 	 */
 	private final int entranceTick;
-	
+
 
 	/**
 	 * @param id 
@@ -47,6 +47,8 @@ public class Client extends ArrivingPerson {
 	protected void leaveFloor(Simulator sim, PersonHandler pHandle) {
 		if(startingTick == PersonHandler.DEFAULTSTARTINGTICK) {
 			pHandle.addToRemove(id);
+		} else {
+			super.leaveFloor(sim, pHandle);
 		}
 		
 	}
